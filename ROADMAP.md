@@ -1,20 +1,40 @@
 <h1>Age Decision AntiSpoof Roadmap</h1>
 
-This roadmap tracks the technical evolution of the Age Decision AntiSpoof service.
+This document tracks the public roadmap of Age Decision AntiSpoof.
 
-<hr>
+<h2>Versioning Strategy</h2>
 
-<h2>v1.0.0 - Credona Initial Public Release</h2>
+Age Decision AntiSpoof follows semantic versioning:
+
+```text
+vX.Y.Z
+```
+
+Meaning:
+
+- `X` changes for major architectural or detection paradigm changes
+- `Y` changes for feature releases
+- `Z` changes for patches, automation, documentation, CI, distribution, and maintenance
+
+Examples:
+
+```text
+v1.0.1 -> automation and distribution patch
+v1.1.0 -> improved spoof detection features
+v2.0.0 -> video and active liveness milestone
+```
+
+<h2>Roadmap</h2>
+
+<h3>v1.0.0 - Credona Initial Public Release</h3>
 
 - [x] Migrate repository to Credona
 - [x] Provide clean open source snapshot
 - [x] Add Apache License 2.0
 - [x] Add FastAPI service
-- [x] Add local Docker development setup
-- [x] Add ONNX model integration
+- [x] Add ONNX anti-spoofing model integration
 - [x] Add MiniFASNetV2 inference
-- [x] Add softmax probability normalization
-- [x] Add 3-class model handling
+- [x] Add 3-class output handling
 - [x] Add binary real / spoof decision
 - [x] Add texture heuristic
 - [x] Add screen pattern heuristic
@@ -26,83 +46,65 @@ This roadmap tracks the technical evolution of the Age Decision AntiSpoof servic
 - [x] Add structured JSON logs
 - [x] Add request_id support
 - [x] Add correlation_id support
-- [x] Add X-Request-ID support
-- [x] Add X-Correlation-ID support
-- [x] Add custom exceptions
-- [x] Add PEP 561 typing support
-- [x] Add privacy metadata
+- [x] Add privacy-first metadata
 - [x] Add spoof_score exposure
-- [x] Add cred_antispoof_score exposure
-- [x] Add confidence calibration layer
+- [x] Add cred_antispoof_score
+- [x] Add confidence calibration
 - [x] Add benchmark dataset structure
-- [x] Add real benchmark dataset downloader
-- [x] Add APCER metric
-- [x] Add BPCER metric
-- [x] Add ACER metric
+- [x] Add benchmark dataset downloader
+- [x] Add APCER / BPCER / ACER metrics
 - [x] Add threshold tuning
 - [x] Add /benchmark endpoint
-- [x] Add benchmark metrics in structured logs
-- [x] Add integration tests with real sample images
-- [x] Add model status with file path and existence check
-- [x] Add stricter invalid image handling
+- [x] Add integration tests with real images
 - [x] Add README documentation
 
-<hr>
+<h3>v1.0.1 - Automation and Distribution</h3>
 
-<h2>v1.0.1 - Automation and Distribution</h2>
+- [x] Add GitHub Actions CI
+- [x] Add automated tests on pull requests
+- [x] Add Docker image build
+- [x] Add automated release workflow
+- [x] Add automated tag-based release notes
+- [x] Publish Docker image (GHCR)
+- [x] Add CodeQL scanning
+- [x] Add Dependabot configuration
+- [x] Add production Dockerfile
+- [x] Embed model files in Docker image
+- [x] Add `.dockerignore`
+- [x] Add `.env.example.dev`
+- [x] Remove APP_NAME and APP_VERSION from runtime environment
+- [x] Add single source of truth for application version
+- [x] Add README badges
+- [x] Align repository structure with core
 
-- [ ] Add GitHub Actions CI
-- [ ] Add automated tests on pull requests
-- [ ] Add Docker image build
-- [ ] Add automated release workflow
-- [ ] Add automated tag-based release notes
-- [ ] Publish Docker image
-- [ ] Add CodeQL scanning
-- [ ] Add Dependabot configuration
+<h3>v1.x - Benchmark and Detection Improvements</h3>
 
-<hr>
-
-<h2>v1.x - Benchmark and Validation Improvements</h2>
-
-- [ ] Add larger benchmark validation
+- [ ] Add larger benchmark validation datasets
 - [ ] Separate calibration and validation datasets
-- [ ] Add configurable threshold tuning strategy
+- [ ] Improve threshold tuning strategy
 - [ ] Add safety-oriented threshold recommendation
-- [ ] Export benchmark report as JSON
-- [ ] Export benchmark report as Markdown
-- [ ] Add CI benchmark job with local or artifact-based datasets
+- [ ] Export benchmark reports (JSON / Markdown)
+- [ ] Add CI benchmark job
 - [ ] Add stricter MIME type validation
-- [ ] Add image size limits
-- [ ] Add benchmark score distribution report
+- [ ] Add image size constraints
+- [ ] Add spoof score distribution analysis
+- [ ] Improve heuristic weighting strategy
 
-<hr>
-
-<h2>v2 - Video and Active Liveness</h2>
+<h3>v2 - Video and Active Liveness</h3>
 
 - [ ] Add video-based liveness detection
 - [ ] Add temporal consistency checks
 - [ ] Add blink detection
 - [ ] Add head movement detection
-- [ ] Add replay attack detection on short video
-- [ ] Add challenge-response liveness checks
+- [ ] Add replay attack detection
+- [ ] Add challenge-response liveness
 
-<hr>
+<h3>v3 - Trust, Privacy and Proof</h3>
 
-<h2>Future evaluation</h2>
-
-- [ ] Add ISO/IEC 30107-3 inspired reporting
-- [ ] Add NIST-style evaluation notes
-- [ ] Add adversarial robustness testing
-- [ ] Add hardware-specific tuning
-- [ ] Add dataset bias analysis
-- [ ] Add privacy review documentation
-
-<hr>
-
-<h2>Future privacy and trust</h2>
-
-- [ ] Add stronger privacy-first documentation
+- [ ] Add stronger privacy-first guarantees
 - [ ] Add signed verification result prototype
 - [ ] Add reusable Credona score envelope
-- [ ] Add ZK-ready result architecture
-- [ ] Add proof-friendly score metadata
+- [ ] Add ZK-ready result structure
+- [ ] Add proof-friendly metadata
+- [ ] Add verifiable anti-spoof claim format
+- [ ] Add external verification example

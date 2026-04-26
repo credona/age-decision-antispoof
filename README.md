@@ -1,5 +1,12 @@
 <h1>Age Decision AntiSpoof</h1>
 
+[![CI](https://github.com/credona/age-decision-antispoof/actions/workflows/ci.yml/badge.svg)](https://github.com/credona/age-decision-antispoof/actions/workflows/ci.yml)
+[![Docker](https://github.com/credona/age-decision-antispoof/actions/workflows/docker.yml/badge.svg)](https://github.com/credona/age-decision-antispoof/actions/workflows/docker.yml)
+[![CodeQL](https://github.com/credona/age-decision-antispoof/actions/workflows/codeql.yml/badge.svg)](https://github.com/credona/age-decision-antispoof/actions/workflows/codeql.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
+[![Container](https://img.shields.io/badge/container-GHCR-blue.svg)](https://github.com/credona/age-decision-antispoof/pkgs/container/age-decision-antispoof)
+
 Age Decision AntiSpoof is the anti-spoofing service of the Age Decision project.
 
 It estimates whether a face image looks like a real human capture or a spoof attempt.
@@ -19,12 +26,13 @@ It combines an ONNX anti-spoofing model with image heuristics and exposes a stru
 - request_id and correlation_id traceability
 - structured JSON logs
 - benchmark metrics and threshold tuning
+- automated CI, Docker build, CodeQL and release workflow
 
 <hr>
 
 <h2>Status</h2>
 
-Current version: <b>v1.0.0</b>
+Current version: <b>v1.0.1</b>
 
 Validated status:
 
@@ -38,6 +46,13 @@ Validated status:
 
 ```text
 age-decision-antispoof/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml
+│   │   ├── codeql.yml
+│   │   ├── docker.yml
+│   │   └── release.yml
+│   └── dependabot.yml
 ├── antispoof/
 │   ├── api/
 │   ├── benchmark/
@@ -51,11 +66,13 @@ age-decision-antispoof/
 │   ├── privacy/
 │   ├── utils/
 │   ├── pipeline.py
-│   └── result.py
+│   ├── result.py
+│   └── version.py
 ├── benchmarks/
 │   └── datasets/
 ├── scripts/
 ├── tests/
+├── Dockerfile
 ├── Dockerfile.dev
 ├── docker-compose.dev.yml
 ├── requirements.txt
@@ -98,12 +115,9 @@ docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scri
 
 <h2>Environment variables</h2>
 
-Example `.env`:
+Example `.env` for local development:
 
 ```env
-APP_NAME=Age Decision AntiSpoof
-APP_VERSION=1.0.0
-
 ANTISPOOF_PORT=8001
 
 ANTISPOOF_THRESHOLD=0.5
@@ -115,6 +129,8 @@ SCREEN_WEIGHT=0.15
 
 LOG_LEVEL=INFO
 ```
+
+`APP_NAME` and `APP_VERSION` are application constants and are not controlled by environment variables.
 
 The three scoring weights must sum to 1.0.
 
@@ -129,7 +145,7 @@ It does not represent the production deployment configuration of Credona hosted 
 Start the service:
 
 ```bash
-cp .env.example .env
+cp .env.example.dev .env
 docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up -d --build
 ```
@@ -146,6 +162,43 @@ View logs:
 docker compose -f docker-compose.dev.yml logs -f age-decision-antispoof
 ```
 
+Stop service:
+
+```bash
+docker compose -f docker-compose.dev.yml down -v
+```
+
+<hr>
+
+<h2>Docker image</h2>
+
+The production-oriented image is built from `Dockerfile`.
+
+Build locally:
+
+```bash
+docker build -t age-decision-antispoof:local .
+```
+
+Run locally:
+
+```bash
+docker run --rm -p 8001:8001 age-decision-antispoof:local
+```
+
+Official GHCR image:
+
+```text
+ghcr.io/credona/age-decision-antispoof
+```
+
+Available tags after release:
+
+```text
+ghcr.io/credona/age-decision-antispoof:v1.0.1
+ghcr.io/credona/age-decision-antispoof:latest
+```
+
 <hr>
 
 <h2>API endpoints</h2>
@@ -160,7 +213,7 @@ curl -i http://localhost:8001/health
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
 ```
 
@@ -173,7 +226,7 @@ curl -i http://localhost:8001/model/status
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "antispoof_model": {
     "type": "onnx",
     "name": "MiniFASNetV2",
@@ -237,28 +290,6 @@ curl -i http://localhost:8001/benchmark
 The benchmark endpoint runs evaluation on the local benchmark dataset if available.
 
 It exposes APCER, BPCER, ACER and a threshold recommendation.
-
-```json
-{
-  "dataset": {
-    "sample_count": 200
-  },
-  "current_threshold": 0.5,
-  "metrics": {
-    "apcer": 0.4198,
-    "bpcer": 0.2464,
-    "acer": 0.3331
-  },
-  "threshold_tuning": {
-    "recommended_threshold": 0.37,
-    "metrics": {
-      "apcer": 0.5267,
-      "bpcer": 0.087,
-      "acer": 0.3068
-    }
-  }
-}
-```
 
 <hr>
 
@@ -332,7 +363,7 @@ Logs are structured JSON events.
 {
   "timestamp": "2026-04-25T20:07:58+00:00",
   "service": "age-decision-antispoof",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "event": "antispoof_check_completed",
   "request_id": "test-request-001",
   "correlation_id": "test-correlation-001",
@@ -378,6 +409,21 @@ image
 
 <hr>
 
+<h2>Automation</h2>
+
+This repository includes:
+
+- GitHub Actions CI
+- automated tests on pull requests
+- Docker image build
+- automated GHCR publishing
+- automated GitHub release creation
+- tag-based release notes
+- CodeQL scanning
+- Dependabot updates
+
+<hr>
+
 <h2>Testing</h2>
 
 Run all tests:
@@ -418,9 +464,9 @@ Its scope is limited to estimating whether a face image appears to be a real cap
 
 <h2>Limitations</h2>
 
-- `v1.0.0` works on still images.
-- `v1.0.0` does not perform active liveness checks.
-- `v1.0.0` does not analyze video sequences.
+- `v1.0.1` works on still images.
+- `v1.0.1` does not perform active liveness checks.
+- `v1.0.1` does not analyze video sequences.
 - Thresholds require larger validation datasets before production tuning.
 - This repository is not certified as an industrial PAD system.
 - Model and dataset licenses must be reviewed before redistribution or commercial use.
@@ -438,5 +484,3 @@ See `ROADMAP.md`.
 This repository is released under the Apache License 2.0.
 
 See the `LICENSE` file for details.
-
-<h2>Roadmap</h2>
