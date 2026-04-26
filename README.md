@@ -22,7 +22,7 @@ It combines an ONNX anti-spoofing model with image heuristics and exposes a stru
 
 - real / spoof decision
 - spoof score
-- Credona anti-spoof trust score
+- Credona anti-spoof trust score (`cred_antispoof_score`)
 - privacy-first response metadata
 - request_id and correlation_id traceability
 - structured JSON logs
@@ -33,12 +33,12 @@ It combines an ONNX anti-spoofing model with image heuristics and exposes a stru
 
 <h2>Status</h2>
 
-Current version: <b>v1.1.1</b>
+Current version: <b>1.2.0</b>
 
 Validated status:
 
 ```text
-45 passed
+Run the test suite to get the latest result.
 ```
 
 <hr>
@@ -131,8 +131,6 @@ SCREEN_WEIGHT=0.15
 LOG_LEVEL=INFO
 ```
 
-`APP_NAME` and `APP_VERSION` are application constants and are not controlled by environment variables.
-
 The three scoring weights must sum to 1.0.
 
 <hr>
@@ -140,8 +138,6 @@ The three scoring weights must sum to 1.0.
 <h2>Local Development with Docker</h2>
 
 The Docker configuration in this repository is intended for local development only.
-
-It does not represent the production deployment configuration of Credona hosted services.
 
 Start the service:
 
@@ -193,16 +189,6 @@ Official GHCR image:
 ghcr.io/credona/age-decision-antispoof
 ```
 
-Available tags after release:
-
-```text
-ghcr.io/credona/age-decision-antispoof:v1.0.1
-ghcr.io/credona/age-decision-antispoof:v1.0.2
-ghcr.io/credona/age-decision-antispoof:v1.1.0
-ghcr.io/credona/age-decision-antispoof:v1.1.1
-ghcr.io/credona/age-decision-antispoof:latest
-```
-
 <hr>
 
 <h2>API endpoints</h2>
@@ -217,7 +203,7 @@ curl -i http://localhost:8001/health
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "1.1.1"
+  "version": "1.2.0"
 }
 ```
 
@@ -230,7 +216,7 @@ curl -i http://localhost:8001/model/status
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "antispoof_model": {
     "type": "onnx",
     "name": "MiniFASNetV2",
@@ -285,15 +271,35 @@ curl -X POST http://localhost:8001/check \
 }
 ```
 
-<h3>Benchmark</h3>
+<h3>Error response</h3>
 
-```bash
-curl -i http://localhost:8001/benchmark
+Error responses follow a stable JSON format.
+
+The API does not expose internal exception details.
+
+```json
+{
+  "request_id": "test-request-001",
+  "correlation_id": "test-correlation-001",
+  "error": {
+    "code": "invalid_image",
+    "message": "Invalid request."
+  }
+}
 ```
 
-The benchmark endpoint runs evaluation on the local benchmark dataset if available.
+Known error codes:
 
-It exposes APCER, BPCER, ACER and a threshold recommendation.
+```text
+empty_file
+invalid_image
+antispoof_processing_error
+benchmark_dataset_unavailable
+benchmark_runtime_error
+internal_error
+```
+
+The message field is intentionally generic and stable. Detailed error context is available only in server logs.
 
 <hr>
 
@@ -315,42 +321,6 @@ A higher value means the capture is more likely to be real.
 
 <hr>
 
-<h2>Metrics</h2>
-
-- <b>APCER</b>: attack presentations incorrectly classified as real.
-- <b>BPCER</b>: bona fide presentations incorrectly classified as spoof.
-- <b>ACER</b>: average of APCER and BPCER.
-
-The ACER-optimal threshold on the local 200-image subset was 0.37.
-
-However, that threshold increased APCER.
-
-For safety-oriented deployments, 0.5 remains the default until larger validation benchmarks are available.
-
-<hr>
-
-<h2>Benchmark dataset</h2>
-
-Real benchmark images are not committed to Git.
-
-A local CelebA-Spoof-compatible subset can be downloaded for integration tests.
-
-```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_benchmark_dataset.py --limit 200
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
-```
-
-Expected local structure:
-
-```text
-benchmarks/datasets/celeba_spoof/
-├── README.md
-├── labels.csv
-└── images/
-```
-
-<hr>
-
 <h2>Privacy</h2>
 
 The API processes uploaded images in memory only.
@@ -367,7 +337,6 @@ Logs are structured JSON events.
 {
   "timestamp": "2026-04-25T20:07:58+00:00",
   "service": "age-decision-antispoof",
-  "version": "1.1.1",
   "event": "antispoof_check_completed",
   "request_id": "test-request-001",
   "correlation_id": "test-correlation-001",
@@ -380,72 +349,12 @@ Logs are structured JSON events.
 
 <hr>
 
-<h2>Python usage</h2>
-
-```python
-from antispoof import AntiSpoof
-
-pipeline = AntiSpoof()
-result = pipeline.predict_from_path("test-face.jpg")
-
-print(result.is_real)
-print(result.cred_antispoof_score)
-print(result.to_dict())
-```
-
-<hr>
-
-<h2>Integration with Age Decision</h2>
-
-`age-decision-core` handles face detection and age estimation.
-
-`age-decision-antispoof` handles real / spoof analysis.
-
-`age-decision-api` orchestrates both services and exposes the final verification API.
-
-```text
-image
-→ age-decision-api
-  → age-decision-core
-  → age-decision-antispoof
-→ final decision
-```
-
-<hr>
-
-<h2>Automation</h2>
-
-This repository includes:
-
-- GitHub Actions CI
-- automated tests on pull requests
-- Docker image build
-- automated GHCR publishing
-- automated GitHub release creation
-- tag-based release notes
-- CodeQL scanning
-- Dependabot updates
-
-<hr>
-
 <h2>Testing</h2>
 
 Run all tests:
 
 ```bash
 docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
-```
-
-Run only integration tests:
-
-```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest tests/integration
-```
-
-Current result:
-
-```text
-45 passed
 ```
 
 <hr>
@@ -462,18 +371,14 @@ This service does not perform:
 - emotion prediction
 - active liveness challenge
 
-Its scope is limited to estimating whether a face image appears to be a real capture or a spoof attempt.
-
 <hr>
 
 <h2>Limitations</h2>
 
-- `v1.1.1` works on still images.
-- `v1.1.1` does not perform active liveness checks.
-- `v1.1.1` does not analyze video sequences.
+- The service works on still images.
+- The service does not perform active liveness checks.
+- The service does not analyze video sequences.
 - Thresholds require larger validation datasets before production tuning.
-- This repository is not certified as an industrial PAD system.
-- Model and dataset licenses must be reviewed before redistribution or commercial use.
 
 <hr>
 

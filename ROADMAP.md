@@ -113,6 +113,17 @@ v2.0.0 -> video and active liveness milestone
 - [x] Validate `/model/status` endpoint
 - [x] Validate `/check` endpoint with real image
 
+<h3>v1.2.0 - API Contract Stabilization</h3>
+
+- [x] Confirm `cred_antispoof_score` as public score field
+- [x] Keep response free from generic `cred_score`
+- [x] Add stable error response schema
+- [x] Add request tracing to error responses
+- [x] Add OpenAPI contract tests
+- [x] Add contract tests for `cred_antispoof_score`
+- [x] Add stricter error response documentation
+- [x] Update README response examples
+
 <h3>v1.x - Benchmark and Detection Improvements</h3>
 
 - [ ] Add larger benchmark validation datasets
