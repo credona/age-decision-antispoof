@@ -2,7 +2,7 @@ numpy==1.26.4
 opencv-python-headless==4.9.0.80
 onnxruntime==1.17.3
 requests==2.33.1
-pytest==8.2.2
+pytest==9.0.3
 
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
