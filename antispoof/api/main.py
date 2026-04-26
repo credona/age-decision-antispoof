@@ -2,15 +2,17 @@ import os
 
 import cv2
 import numpy as np
-from fastapi import FastAPI, File, Header, HTTPException, UploadFile
+from fastapi import FastAPI, File, Header, UploadFile
+from fastapi.responses import JSONResponse
 
 from antispoof import AntiSpoof
+from antispoof.api.schemas import ErrorResponse
+from antispoof.benchmark import run_local_benchmark
 from antispoof.core import build_request_context
 from antispoof.exceptions import AntiSpoofError
 from antispoof.models.loader import AntiSpoofModelLoader
 from antispoof.privacy import build_privacy_metadata
 from antispoof.utils.logger import log_event
-from antispoof.benchmark import run_local_benchmark
 from antispoof.version import APP_NAME, APP_VERSION
 
 THRESHOLD = float(os.getenv("ANTISPOOF_THRESHOLD", "0.5"))
@@ -28,12 +30,10 @@ HEURISTICS = [
     "blur",
 ]
 
-
 app = FastAPI(
     title=APP_NAME,
     version=APP_VERSION,
 )
-
 
 model_loader = AntiSpoofModelLoader()
 
@@ -76,7 +76,14 @@ def model_status():
         },
     }
 
-@app.get("/benchmark")
+
+@app.get(
+    "/benchmark",
+    responses={
+        404: {"model": ErrorResponse},
+        500: {"model": ErrorResponse},
+    },
+)
 def benchmark(
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
@@ -117,19 +124,50 @@ def benchmark(
 
         return response
 
-    except FileNotFoundError as exc:
-        log_event(
-            "antispoof_benchmark_unavailable",
-            {
-                "request_id": context.request_id,
-                "correlation_id": context.correlation_id,
-                "error": str(exc),
-            },
+    except FileNotFoundError:
+        _log_error(
+            event="antispoof_benchmark_unavailable",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="dataset_error",
+            error_code="benchmark_dataset_unavailable",
             level="warning",
         )
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
-@app.post("/check")
+        return _error_response(
+            status_code=404,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="benchmark_dataset_unavailable",
+            message="Benchmark dataset unavailable.",
+        )
+
+    except Exception:
+        _log_error(
+            event="antispoof_benchmark_failed",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="runtime_error",
+            error_code="benchmark_runtime_error",
+            level="error",
+        )
+
+        return _error_response(
+            status_code=500,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="benchmark_runtime_error",
+            message="An internal error has occurred.",
+        )
+
+
+@app.post(
+    "/check",
+    responses={
+        400: {"model": ErrorResponse},
+        500: {"model": ErrorResponse},
+    },
+)
 async def check(
     file: UploadFile = File(...),
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
@@ -148,13 +186,21 @@ async def check(
         contents = await file.read()
 
         if not contents:
-            raise HTTPException(status_code=400, detail="Empty image file")
+            return _rejected_check_response(
+                request_id=context.request_id,
+                correlation_id=context.correlation_id,
+                code="empty_file",
+            )
 
         np_arr = np.frombuffer(contents, np.uint8)
         image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
         if image is None:
-            raise HTTPException(status_code=400, detail="Invalid image file")
+            return _rejected_check_response(
+                request_id=context.request_id,
+                correlation_id=context.correlation_id,
+                code="invalid_image",
+            )
 
         result = pipeline.predict(image)
 
@@ -199,39 +245,101 @@ async def check(
 
         return response
 
-    except HTTPException as exc:
-        log_event(
-            "antispoof_check_rejected",
-            {
-                "request_id": context.request_id,
-                "correlation_id": context.correlation_id,
-                "status_code": exc.status_code,
-                "detail": exc.detail,
-            },
+    except AntiSpoofError:
+        _log_error(
+            event="antispoof_check_failed",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="antispoof_error",
+            error_code="antispoof_processing_error",
             level="warning",
         )
-        raise
 
-    except AntiSpoofError as exc:
-        log_event(
-            "antispoof_check_failed",
-            {
-                "request_id": context.request_id,
-                "correlation_id": context.correlation_id,
-                "error": str(exc),
-            },
-            level="warning",
+        return _error_response(
+            status_code=400,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="antispoof_processing_error",
+            message="Invalid request.",
         )
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-    except Exception as exc:
-        log_event(
-            "antispoof_check_failed",
-            {
-                "request_id": context.request_id,
-                "correlation_id": context.correlation_id,
-                "error": "internal_error",
-            },
+    except Exception:
+        _log_error(
+            event="antispoof_check_failed",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="runtime_error",
+            error_code="internal_error",
             level="error",
         )
-        raise HTTPException(status_code=500, detail="Internal error") from exc
+
+        return _error_response(
+            status_code=500,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="internal_error",
+            message="An internal error has occurred.",
+        )
+
+
+def _rejected_check_response(
+    request_id: str,
+    correlation_id: str,
+    code: str,
+) -> JSONResponse:
+    _log_error(
+        event="antispoof_check_rejected",
+        request_id=request_id,
+        correlation_id=correlation_id,
+        error_type="validation_error",
+        error_code=code,
+        level="warning",
+    )
+
+    return _error_response(
+        status_code=400,
+        request_id=request_id,
+        correlation_id=correlation_id,
+        code=code,
+        message="Invalid request.",
+    )
+
+
+def _error_response(
+    status_code: int,
+    request_id: str,
+    correlation_id: str,
+    code: str,
+    message: str,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "request_id": request_id,
+            "correlation_id": correlation_id,
+            "error": {
+                "code": code,
+                "message": message,
+            },
+        },
+    )
+
+
+def _log_error(
+    event: str,
+    request_id: str,
+    correlation_id: str,
+    error_type: str,
+    error_code: str,
+    level: str,
+) -> None:
+    log_event(
+        event,
+        {
+            "request_id": request_id,
+            "correlation_id": correlation_id,
+            "error_type": error_type,
+            "error_code": error_code,
+        },
+        level=level,
+    )

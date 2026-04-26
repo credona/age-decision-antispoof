@@ -129,22 +129,48 @@ def test_check_rejects_empty_image():
     """Test /check endpoint rejects an empty image payload."""
     response = client.post(
         "/check",
+        headers={"X-Request-ID": "test-request-empty"},
         files={"file": ("empty.jpg", b"", "image/jpeg")},
     )
 
     assert response.status_code == 400
-    assert response.json()["detail"] == "Empty image file"
+
+    payload = response.json()
+
+    assert payload == {
+        "request_id": "test-request-empty",
+        "correlation_id": "test-request-empty",
+        "error": {
+            "code": "empty_file",
+            "message": "Invalid request.",
+        },
+    }
 
 
 def test_check_rejects_invalid_image():
     """Test /check endpoint rejects invalid image bytes."""
     response = client.post(
         "/check",
+        headers={
+            "X-Request-ID": "test-request-invalid",
+            "X-Correlation-ID": "test-correlation-invalid",
+        },
         files={"file": ("invalid.jpg", b"not-an-image", "image/jpeg")},
     )
 
     assert response.status_code == 400
-    assert response.json()["detail"] == "Invalid image file"
+
+    payload = response.json()
+
+    assert payload == {
+        "request_id": "test-request-invalid",
+        "correlation_id": "test-correlation-invalid",
+        "error": {
+            "code": "invalid_image",
+            "message": "Invalid request.",
+        },
+    }
+
 
 def test_benchmark_endpoint_returns_404_when_dataset_is_missing(monkeypatch):
     """Test /benchmark returns 404 when local benchmark dataset is unavailable."""
@@ -155,7 +181,23 @@ def test_benchmark_endpoint_returns_404_when_dataset_is_missing(monkeypatch):
 
     monkeypatch.setattr(main, "run_local_benchmark", fake_run_local_benchmark)
 
-    response = client.get("/benchmark")
+    response = client.get(
+        "/benchmark",
+        headers={
+            "X-Request-ID": "test-request-benchmark",
+            "X-Correlation-ID": "test-correlation-benchmark",
+        },
+    )
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Benchmark labels file not found"
+
+    payload = response.json()
+
+    assert payload == {
+        "request_id": "test-request-benchmark",
+        "correlation_id": "test-correlation-benchmark",
+        "error": {
+            "code": "benchmark_dataset_unavailable",
+            "message": "Benchmark dataset unavailable.",
+        },
+    }
