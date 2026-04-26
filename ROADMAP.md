@@ -93,6 +93,16 @@ v2.0.0 -> video and active liveness milestone
 - [x] Validate `/model/status` endpoint
 - [x] Validate `/check` endpoint with real image
 
+<h3>v1.1.0 - Python Runtime Upgrade</h3>
+
+- [x] Upgrade Docker runtime from Python 3.11 to Python 3.14
+- [x] Validate API runtime compatibility with Python 3.14
+- [x] Validate downstream service compatibility with Python 3.14
+- [x] Validate `/health` endpoint
+- [x] Validate `/ready` endpoint
+- [x] Validate `/verify` endpoint with real image
+
+
 <h3>v1.x - Benchmark and Detection Improvements</h3>
 
 - [ ] Add larger benchmark validation datasets
@@ -105,9 +115,6 @@ v2.0.0 -> video and active liveness milestone
 - [ ] Add image size constraints
 - [ ] Add spoof score distribution analysis
 - [ ] Improve heuristic weighting strategy
-- [ ] Upgrade Docker runtime from Python 3.11 to Python 3.14
-- [ ] Validate ONNX Runtime compatibility with Python 3.14
-- [ ] Validate OpenCV compatibility with Python 3.14
 
 <h3>v2 - Video and Active Liveness</h3>
 
