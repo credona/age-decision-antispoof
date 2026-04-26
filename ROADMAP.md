@@ -77,6 +77,22 @@ v2.0.0 -> video and active liveness milestone
 - [x] Add README badges
 - [x] Align repository structure with core
 
+<h3>v1.0.2 - Security and Dependency Maintenance</h3>
+
+- [x] Update GitHub Actions
+- [x] Update python-multipart
+- [x] Update Pytest
+- [x] Update FastAPI
+- [x] Update Uvicorn
+- [x] Update ONNX Runtime
+- [x] Update NumPy
+- [x] Update OpenCV headless
+- [x] Keep Python 3.11 runtime for ML compatibility
+- [x] Validate Docker runtime after dependency updates
+- [x] Validate `/health` endpoint
+- [x] Validate `/model/status` endpoint
+- [x] Validate `/check` endpoint with real image
+
 <h3>v1.x - Benchmark and Detection Improvements</h3>
 
 - [ ] Add larger benchmark validation datasets
@@ -89,6 +105,9 @@ v2.0.0 -> video and active liveness milestone
 - [ ] Add image size constraints
 - [ ] Add spoof score distribution analysis
 - [ ] Improve heuristic weighting strategy
+- [ ] Upgrade Docker runtime from Python 3.11 to Python 3.14
+- [ ] Validate ONNX Runtime compatibility with Python 3.14
+- [ ] Validate OpenCV compatibility with Python 3.14
 
 <h3>v2 - Video and Active Liveness</h3>
 

@@ -33,7 +33,7 @@ It combines an ONNX anti-spoofing model with image heuristics and exposes a stru
 
 <h2>Status</h2>
 
-Current version: <b>v1.0.1</b>
+Current version: <b>v1.0.2</b>
 
 Validated status:
 
@@ -197,6 +197,7 @@ Available tags after release:
 
 ```text
 ghcr.io/credona/age-decision-antispoof:v1.0.1
+ghcr.io/credona/age-decision-antispoof:v1.0.2
 ghcr.io/credona/age-decision-antispoof:latest
 ```
 
@@ -214,7 +215,7 @@ curl -i http://localhost:8001/health
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "1.0.1"
+  "version": "1.0.2"
 }
 ```
 
@@ -227,7 +228,7 @@ curl -i http://localhost:8001/model/status
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "antispoof_model": {
     "type": "onnx",
     "name": "MiniFASNetV2",
@@ -364,7 +365,7 @@ Logs are structured JSON events.
 {
   "timestamp": "2026-04-25T20:07:58+00:00",
   "service": "age-decision-antispoof",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "event": "antispoof_check_completed",
   "request_id": "test-request-001",
   "correlation_id": "test-correlation-001",
@@ -465,9 +466,9 @@ Its scope is limited to estimating whether a face image appears to be a real cap
 
 <h2>Limitations</h2>
 
-- `v1.0.1` works on still images.
-- `v1.0.1` does not perform active liveness checks.
-- `v1.0.1` does not analyze video sequences.
+- `v1.0.2` works on still images.
+- `v1.0.2` does not perform active liveness checks.
+- `v1.0.2` does not analyze video sequences.
 - Thresholds require larger validation datasets before production tuning.
 - This repository is not certified as an industrial PAD system.
 - Model and dataset licenses must be reviewed before redistribution or commercial use.
