@@ -102,6 +102,16 @@ v2.0.0 -> video and active liveness milestone
 - [x] Validate `/ready` endpoint
 - [x] Validate `/verify` endpoint with real image
 
+<h3>v1.1.1 - Dependency and CI Maintenance</h3>
+
+- [x] Update httpx
+- [x] Update docker/login-action
+- [x] Update docker/setup-buildx-action
+- [x] Update action-gh-release
+- [x] Validate Docker runtime after updates
+- [x] Validate `/health` endpoint
+- [x] Validate `/model/status` endpoint
+- [x] Validate `/check` endpoint with real image
 
 <h3>v1.x - Benchmark and Detection Improvements</h3>
 
