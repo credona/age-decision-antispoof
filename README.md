@@ -1,11 +1,12 @@
 <h1>Age Decision AntiSpoof</h1>
 
-[![CI](https://github.com/credona/age-decision-antispoof/actions/workflows/ci.yml/badge.svg)](https://github.com/credona/age-decision-antispoof/actions/workflows/ci.yml)
-[![Docker](https://github.com/credona/age-decision-antispoof/actions/workflows/docker.yml/badge.svg)](https://github.com/credona/age-decision-antispoof/actions/workflows/docker.yml)
-[![CodeQL](https://github.com/credona/age-decision-antispoof/actions/workflows/codeql.yml/badge.svg)](https://github.com/credona/age-decision-antispoof/actions/workflows/codeql.yml)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
-[![Container](https://img.shields.io/badge/container-GHCR-blue.svg)](https://github.com/credona/age-decision-antispoof/pkgs/container/age-decision-antispoof)
+<p>
+  <img src="https://img.shields.io/github/actions/workflow/status/credona/age-decision-antispoof/ci.yml?branch=main&label=CI" alt="CI">
+  <img src="https://img.shields.io/github/actions/workflow/status/credona/age-decision-antispoof/docker.yml?branch=main&label=Docker" alt="Docker">
+  <img src="https://img.shields.io/github/actions/workflow/status/credona/age-decision-antispoof/codeql.yml?branch=main&label=CodeQL" alt="CodeQL">
+  <img src="https://img.shields.io/github/v/release/credona/age-decision-antispoof" alt="Release">
+  <img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License">
+</p>
 
 Age Decision AntiSpoof is the anti-spoofing service of the Age Decision project.
 
