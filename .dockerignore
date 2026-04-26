@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+
+# Virtual env
+.venv
+venv/
+
+# Tests
+tests/
+
+# Benchmarks / datasets (très lourd)
+benchmarks/
+
+# Local env
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Docker dev only
+docker-compose.dev.yml
+Dockerfile.dev
+
+README.md
+ROADMAP.md

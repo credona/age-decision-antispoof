@@ -11,9 +11,7 @@ from antispoof.models.loader import AntiSpoofModelLoader
 from antispoof.privacy import build_privacy_metadata
 from antispoof.utils.logger import log_event
 from antispoof.benchmark import run_local_benchmark
-
-APP_NAME = os.getenv("APP_NAME", "Age Decision AntiSpoof")
-APP_VERSION = os.getenv("APP_VERSION", "1.1.0")
+from antispoof.version import APP_NAME, APP_VERSION
 
 THRESHOLD = float(os.getenv("ANTISPOOF_THRESHOLD", "0.5"))
 
