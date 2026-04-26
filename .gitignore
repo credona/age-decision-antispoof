@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.env
+
+antispoof/models/*.onnx
+benchmarks/datasets/celeba_spoof/images/
+benchmarks/datasets/celeba_spoof/labels.csv

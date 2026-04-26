@@ -1,0 +1,18 @@
+services:
+  age-decision-antispoof:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: age-decision-antispoof
+    ports:
+      - "${ANTISPOOF_PORT:-8001}:8001"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    networks:
+      - age-decision-network
+
+networks:
+  age-decision-network:
+    external: true

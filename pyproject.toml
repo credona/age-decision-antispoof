@@ -1,0 +1,9 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "integration: marks tests as integration tests using local benchmark assets"
+]
+
+[tool.setuptools.package-data]
+antispoof = ["py.typed"]
