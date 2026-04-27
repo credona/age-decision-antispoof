@@ -39,3 +39,12 @@ Dockerfile.dev
 
 *.md
 !README.md
+
+# Model binaries
+antispoof/models
+antispoof/models/*.onnx
+antispoof/models/**/*.onnx
+antispoof/models/*.bin
+antispoof/models/*.pt
+antispoof/models/*.pth
+antispoof/models/*.tflite
