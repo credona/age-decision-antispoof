@@ -37,5 +37,5 @@ benchmarks/
 docker-compose.dev.yml
 Dockerfile.dev
 
-README.md
-ROADMAP.md
+*.md
+!README.md

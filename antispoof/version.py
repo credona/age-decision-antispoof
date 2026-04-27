@@ -1,4 +1,4 @@
 """Application version metadata."""
 
 APP_NAME = "Age Decision AntiSpoof"
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.2.1"
