@@ -176,6 +176,7 @@ async def check(
     """Run anti-spoofing verification on an uploaded image.
 
     The image is processed in memory only and is never persisted.
+    Internal model scores and heuristic details are not exposed publicly.
     """
     context = build_request_context(
         request_id=x_request_id,
@@ -211,10 +212,7 @@ async def check(
             "decision": result.label,
             "is_real": result.is_real,
             "spoof_detected": not result.is_real,
-            "confidence": result.confidence,
-            "spoof_score": result.spoof_score,
             "cred_antispoof_score": result.cred_antispoof_score,
-            "threshold": result.threshold,
             "rejection_reason": None,
             "privacy": build_privacy_metadata(),
             "model_info": {
@@ -222,7 +220,6 @@ async def check(
                 "model_type": MODEL_TYPE,
                 "heuristics": HEURISTICS,
             },
-            "details": result.details,
         }
 
         log_event(
@@ -233,10 +230,7 @@ async def check(
                 "decision": response["decision"],
                 "is_real": response["is_real"],
                 "spoof_detected": response["spoof_detected"],
-                "confidence": response["confidence"],
-                "spoof_score": response["spoof_score"],
                 "cred_antispoof_score": response["cred_antispoof_score"],
-                "threshold": response["threshold"],
                 "provider": response["provider"],
                 "image_persisted": response["privacy"]["image_persisted"],
                 "raw_image_logged": response["privacy"]["raw_image_logged"],

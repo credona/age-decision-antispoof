@@ -12,6 +12,8 @@ Age Decision AntiSpoof is the presentation attack detection service of the Age D
 
 It estimates whether a face image appears to be a real human capture or a spoof attempt.
 
+It does not expose raw model scores, heuristic details, or internal calibration details through the public API.
+
 It does not perform identity verification, face recognition, document verification, age estimation, or active liveness challenge.
 
 <hr>
@@ -51,6 +53,31 @@ curl -X POST http://localhost:8001/check \
   -H "X-Correlation-ID: test-correlation-001" \
   -F "file=@./test-face.jpg"
 ```
+
+<hr>
+
+<h2>Public contract</h2>
+
+The main response exposes:
+
+- `decision`
+- `is_real`
+- `spoof_detected`
+- `cred_antispoof_score`
+- `request_id`
+- `correlation_id`
+- `privacy`
+- `model_info`
+- `rejection_reason`
+
+The public response does not expose:
+
+- raw model scores
+- raw logits
+- heuristic details
+- calibration details
+- internal threshold value
+- legacy `cred_score` alias
 
 <hr>
 

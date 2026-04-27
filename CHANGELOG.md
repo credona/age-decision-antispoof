@@ -6,13 +6,17 @@ Global project direction is tracked in the central Age Decision repository.
 
 <hr>
 
-<h2>Unreleased</h2>
+<h2>2.0.0</h2>
 
 - Clarified model binary policy.
 - Removed ONNX model download from Docker build.
 - Documented explicit model download requirement.
 - Documented that Docker images should not embed model binaries.
 - Updated README and usage documentation accordingly.
+- Removed raw model scores from the public `/check` response.
+- Removed `confidence`, `spoof_score`, `threshold`, and `details` from the public `/check` response.
+- Kept internal diagnostic fields available in the Python result object.
+- Documented the privacy-first public anti-spoof response contract.
 
 <hr>
 

@@ -34,6 +34,9 @@ LOG_LEVEL=INFO
 ```
 
 The three scoring weights must sum to `1.0`.
+`ANTISPOOF_THRESHOLD` and scoring weights are internal decision policy parameters.
+
+They are not exposed in the public `/check` response.
 
 <hr>
 
@@ -89,7 +92,7 @@ Example response:
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "1.2.1"
+  "version": "2.0.0"
 }
 ```
 
@@ -106,7 +109,7 @@ Example response:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "antispoof_model": {
     "type": "onnx",
     "name": "MiniFASNetV2",
@@ -149,10 +152,7 @@ Example response:
   "decision": "real",
   "is_real": true,
   "spoof_detected": false,
-  "confidence": 0.82,
-  "spoof_score": 0.18,
   "cred_antispoof_score": 0.82,
-  "threshold": 0.5,
   "rejection_reason": null,
   "privacy": {
     "privacy_first": true,
@@ -173,6 +173,22 @@ Example response:
   }
 }
 ```
+
+
+<hr>
+
+<h2>Public privacy contract</h2>
+
+The public `/check` response does not expose:
+
+- raw image content
+- raw model scores
+- raw logits
+- heuristic details
+- calibration details
+- internal threshold value
+- legacy `cred_score` alias
+
 
 <hr>
 
