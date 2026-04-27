@@ -37,11 +37,30 @@ The three scoring weights must sum to `1.0`.
 
 <hr>
 
+<h2>Model setup</h2>
+
+Download model files locally:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+```
+
+Expected file:
+
+```text
+antispoof/models/MiniFASNetV2.onnx
+```
+
+Model binaries are not intended to be committed to Git or embedded in Docker images.
+
+<hr>
+
 <h2>Run with Docker</h2>
 
 ```bash
 docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up -d --build
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
 ```
 
 View logs:

@@ -16,6 +16,7 @@ https://github.com/credona/age-decision/blob/main/CONTRIBUTING.md
 cp .env.example.dev .env
 docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up -d --build
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
 ```
 
 <hr>
@@ -23,6 +24,7 @@ docker compose -f docker-compose.dev.yml up -d --build
 <h2>Run tests</h2>
 
 ```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
 docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
 ```
 
@@ -52,7 +54,25 @@ Do not commit:
 - generated cache folders
 - local secrets
 - unlicensed model files
+- ONNX model binaries
 - benchmark datasets without clear license review
+
+Models must be downloaded using:
+
+```text
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+```
+
+<hr>
+
+<h2>Model policy</h2>
+
+When modifying models:
+
+- update docs/models.md
+- update scripts/download_models.py
+- verify upstream license
+- document source and usage
 
 <hr>
 

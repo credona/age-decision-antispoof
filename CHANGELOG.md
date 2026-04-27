@@ -6,6 +6,16 @@ Global project direction is tracked in the central Age Decision repository.
 
 <hr>
 
+<h2>Unreleased</h2>
+
+- Clarified model binary policy.
+- Removed ONNX model download from Docker build.
+- Documented explicit model download requirement.
+- Documented that Docker images should not embed model binaries.
+- Updated README and usage documentation accordingly.
+
+<hr>
+
 <h2>1.2.1</h2>
 
 - Documentation structure simplified.

@@ -19,7 +19,7 @@ It does not perform identity verification, face recognition, document verificati
 <h2>Documentation</h2>
 
 - Usage: docs/usage.md
-- Models: docs/models.md
+- Models and third-party notes: docs/models.md
 - Benchmarks: docs/benchmarks.md
 - Changelog: CHANGELOG.md
 - Contributing: CONTRIBUTING.md
@@ -33,6 +33,7 @@ It does not perform identity verification, face recognition, document verificati
 cp .env.example.dev .env
 docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up -d --build
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
 ```
 
 Check the service:
@@ -53,22 +54,27 @@ curl -X POST http://localhost:8001/check \
 
 <hr>
 
-<h2>Public contract</h2>
+<h2>Model files</h2>
 
-The main response exposes:
+The service relies on external ONNX model files.
 
-- `decision`
-- `is_real`
-- `spoof_detected`
-- `confidence`
-- `spoof_score`
-- `cred_antispoof_score`
-- `request_id`
-- `correlation_id`
-- `privacy`
-- `model_info`
+Model binaries are not intended to be committed to Git.
 
-`cred_antispoof_score` is the explicit anti-spoof trust score produced by this service.
+Model binaries are not intended to be embedded in the public Docker image.
+
+Download them explicitly:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+```
+
+Expected path:
+
+```text
+antispoof/models/MiniFASNetV2.onnx
+```
+
+See docs/models.md for model origin, license notes, and redistribution checks.
 
 <hr>
 
@@ -78,11 +84,23 @@ The main response exposes:
 ghcr.io/credona/age-decision-antispoof
 ```
 
+Run with mounted models:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+
+docker run --rm \
+  -p 8001:8001 \
+  -v "$PWD/antispoof/models:/app/antispoof/models" \
+  ghcr.io/credona/age-decision-antispoof:latest
+```
+
 <hr>
 
 <h2>Testing</h2>
 
 ```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
 docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
 ```
 
@@ -92,4 +110,6 @@ docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
 
 This repository is released under the Apache License 2.0.
 
-See LICENSE for details.
+Third-party models may have their own upstream license and constraints.
+
+See docs/models.md for details.

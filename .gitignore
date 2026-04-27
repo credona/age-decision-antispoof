@@ -4,6 +4,14 @@ __pycache__/
 .venv/
 .env
 
-antispoof/models/*.onnx
 benchmarks/datasets/celeba_spoof/images/
 benchmarks/datasets/celeba_spoof/labels.csv
+
+# Model binaries
+antispoof/models/*.onnx
+antispoof/models/**/*.onnx
+antispoof/models/*.bin
+antispoof/models/*.pt
+antispoof/models/*.pth
+antispoof/models/*.tflite
+!antispoof/models/.gitkeep

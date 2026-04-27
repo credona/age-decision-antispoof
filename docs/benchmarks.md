@@ -111,3 +111,14 @@ ACER
 recommended threshold
 known limitations
 ```
+
+<hr>
+
+<h2>Model context</h2>
+
+Benchmark results depend on the model file used.
+
+Always report:
+
+- model path
+- model source
