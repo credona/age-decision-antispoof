@@ -18,7 +18,7 @@ def _build_jpeg_image_bytes() -> bytes:
     return buffer.tobytes()
 
 
-def test_check_response_exposes_cred_antispoof_score():
+def test_check_response_exposes_only_public_cred_antispoof_score():
     response = client.post(
         "/check",
         headers={
@@ -34,4 +34,9 @@ def test_check_response_exposes_cred_antispoof_score():
 
     assert "cred_antispoof_score" in payload
     assert 0.0 <= payload["cred_antispoof_score"] <= 1.0
+
+    assert "confidence" not in payload
+    assert "spoof_score" not in payload
+    assert "threshold" not in payload
+    assert "details" not in payload
     assert "cred_score" not in payload

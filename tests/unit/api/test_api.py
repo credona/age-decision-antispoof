@@ -73,14 +73,16 @@ def test_check_with_generated_image():
     assert "is_real" in payload
     assert "spoof_detected" in payload
     assert "decision" in payload
-    assert "confidence" in payload
-    assert "spoof_score" in payload
     assert "cred_antispoof_score" in payload
     assert 0.0 <= payload["cred_antispoof_score"] <= 1.0
-    assert "threshold" in payload
-    assert "details" in payload
     assert "model_info" in payload
     assert "privacy" in payload
+
+    assert "confidence" not in payload
+    assert "spoof_score" not in payload
+    assert "threshold" not in payload
+    assert "details" not in payload
+    assert "cred_score" not in payload
 
     assert payload["rejection_reason"] is None
 
