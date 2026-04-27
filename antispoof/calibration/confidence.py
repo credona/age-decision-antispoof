@@ -6,7 +6,7 @@ def _clamp_score(value: float) -> float:
 def calibrate_antispoof_confidence(raw_score: float) -> float:
     """Calibrate the anti-spoofing confidence score.
 
-    The current V1.1 calibration is intentionally conservative:
+    The current version calibration is intentionally conservative:
     it only guarantees a valid probability-like interval.
 
     This function is isolated so future versions can replace it with

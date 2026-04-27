@@ -92,7 +92,7 @@ Example response:
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "1.2.1"
+  "version": "2.0.0"
 }
 ```
 
@@ -109,7 +109,7 @@ Example response:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "antispoof_model": {
     "type": "onnx",
     "name": "MiniFASNetV2",
