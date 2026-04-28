@@ -1,5 +1,5 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 
 @dataclass(frozen=True)
@@ -44,7 +44,7 @@ def compute_error_rates(
     attack_misclassified_as_real = 0
     bona_fide_misclassified_as_attack = 0
 
-    for ground_truth, prediction in zip(ground_truth_labels, predicted_labels):
+    for ground_truth, prediction in zip(ground_truth_labels, predicted_labels, strict=True):
         if ground_truth not in {"real", "spoof"}:
             raise ValueError(f"Unsupported ground truth label: {ground_truth}")
 

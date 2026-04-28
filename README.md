@@ -20,9 +20,11 @@ It does not perform identity verification, face recognition, document verificati
 
 <h2>Documentation</h2>
 
+- Repository: https://github.com/credona/age-decision-antispoof
 - Usage: docs/usage.md
 - Models and third-party notes: docs/models.md
 - Benchmarks: docs/benchmarks.md
+- Compatibility: docs/compatibility.md
 - Changelog: CHANGELOG.md
 - Contributing: CONTRIBUTING.md
 - Global project: https://github.com/credona/age-decision
@@ -42,8 +44,37 @@ Check the service:
 
 ```bash
 curl -i http://localhost:8001/health
+curl -i http://localhost:8001/version
 curl -i http://localhost:8001/model/status
 ```
+
+Expected health response:
+
+<!-- BEGIN:HEALTH_RESPONSE -->
+```json
+{
+  "status": "ok",
+  "service": "age-decision-antispoof",
+  "version": "2.1.0",
+  "contract_version": "2.0"
+}
+```
+<!-- END:HEALTH_RESPONSE -->
+
+Expected version response:
+
+<!-- BEGIN:VERSION_RESPONSE -->
+```json
+{
+  "service_name": "age-decision-antispoof",
+  "app_name": "Age Decision AntiSpoof",
+  "version": "2.1.0",
+  "contract_version": "2.0",
+  "repository": "https://github.com/credona/age-decision-antispoof",
+  "image": "ghcr.io/credona/age-decision-antispoof"
+}
+```
+<!-- END:VERSION_RESPONSE -->
 
 Run an anti-spoof check:
 
@@ -78,6 +109,37 @@ The public response does not expose:
 - calibration details
 - internal threshold value
 - legacy `cred_score` alias
+
+<hr>
+
+<h2>Compatibility metadata</h2>
+
+Compatibility metadata is declared in `compatibility.json` and checked by CI.
+
+<!-- BEGIN:COMPATIBILITY_METADATA -->
+```json
+{
+  "service": "age-decision-antispoof",
+  "version": "2.1.0",
+  "contract_version": "2.0",
+  "compatible_with": {
+    "age-decision-api": ">=2.0.0 <3.0.0",
+    "age-decision-js": ">=2.0.0 <3.0.0"
+  },
+  "public_contract": {
+    "decision_values": [
+      "real",
+      "spoof"
+    ],
+    "score_field": "cred_antispoof_score",
+    "raw_model_scores_exposed": false,
+    "heuristic_details_exposed": false,
+    "calibration_details_exposed": false,
+    "legacy_cred_score_exposed": false
+  }
+}
+```
+<!-- END:COMPATIBILITY_METADATA -->
 
 <hr>
 
@@ -120,6 +182,39 @@ docker run --rm \
   -p 8001:8001 \
   -v "$PWD/antispoof/models:/app/antispoof/models" \
   ghcr.io/credona/age-decision-antispoof:latest
+```
+
+<hr>
+
+<h2>Quality and compatibility checks</h2>
+
+Run tests:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
+```
+
+Run contract tests:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest tests/unit/contract
+```
+
+Run quality checks:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof ruff check .
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof ruff format --check .
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/check_project_metadata.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/check_compatibility_metadata.py
+```
+
+Update generated documentation blocks:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/update_readme_examples.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/update_docs_usage.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/update_docs_compatibility.py
 ```
 
 <hr>

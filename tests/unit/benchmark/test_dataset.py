@@ -9,9 +9,7 @@ def test_load_benchmark_labels(tmp_path):
     """Test benchmark CSV loading."""
     csv_path = tmp_path / "labels.csv"
     csv_path.write_text(
-        "image_path,label\n"
-        "real/001.jpg,real\n"
-        "spoof/001.jpg,spoof\n",
+        "image_path,label\nreal/001.jpg,real\nspoof/001.jpg,spoof\n",
         encoding="utf-8",
     )
 
@@ -34,8 +32,7 @@ def test_load_benchmark_labels_rejects_missing_columns(tmp_path):
     """Test benchmark CSV required columns validation."""
     csv_path = tmp_path / "labels.csv"
     csv_path.write_text(
-        "path,target\n"
-        "real/001.jpg,real\n",
+        "path,target\nreal/001.jpg,real\n",
         encoding="utf-8",
     )
 
@@ -49,8 +46,7 @@ def test_load_benchmark_labels_rejects_invalid_label(tmp_path):
     """Test benchmark CSV label validation."""
     csv_path = tmp_path / "labels.csv"
     csv_path.write_text(
-        "image_path,label\n"
-        "unknown/001.jpg,unknown\n",
+        "image_path,label\nunknown/001.jpg,unknown\n",
         encoding="utf-8",
     )
 

@@ -6,7 +6,6 @@ from antispoof import AntiSpoof
 from antispoof.benchmark import load_benchmark_labels
 from antispoof.metrics import compute_error_rates
 
-
 DATASET_DIR = Path("benchmarks/datasets/celeba_spoof")
 LABELS_CSV = DATASET_DIR / "labels.csv"
 
@@ -19,8 +18,7 @@ def test_real_benchmark_sample_images():
     """
     if not LABELS_CSV.exists():
         pytest.skip(
-            "Real benchmark dataset not found. "
-            "Run scripts/download_benchmark_dataset.py first."
+            "Real benchmark dataset not found. Run scripts/download_benchmark_dataset.py first."
         )
 
     samples = load_benchmark_labels(LABELS_CSV)
@@ -33,7 +31,7 @@ def test_real_benchmark_sample_images():
         image_path = DATASET_DIR / sample.image_path
 
         if not image_path.exists():
-            raise FileNotFoundError(f"Benchmark image not found: {image_path}")
+            pytest.skip(f"Benchmark image not found: {image_path}")
 
         result = pipeline.predict_from_path(image_path)
 

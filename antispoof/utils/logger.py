@@ -1,8 +1,9 @@
 import json
 import logging
-from datetime import datetime, timezone
-from typing import Any, Dict
+from datetime import UTC, datetime
+from typing import Any
 
+from antispoof.project import project_metadata
 
 logger = logging.getLogger("antispoof")
 logger.setLevel(logging.INFO)
@@ -18,7 +19,7 @@ if not logger.handlers:
 
 def log_event(
     event: str,
-    payload: Dict[str, Any] | None = None,
+    payload: dict[str, Any] | None = None,
     level: str = "info",
 ) -> None:
     """Log a structured JSON event.
@@ -26,8 +27,10 @@ def log_event(
     Logs must remain machine-readable and must never contain raw image data.
     """
     log_entry = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "service": "age-decision-antispoof",
+        "timestamp": datetime.now(UTC).isoformat(),
+        "service": project_metadata.service_name,
+        "version": project_metadata.version,
+        "contract_version": project_metadata.contract_version,
         "event": event,
         **(payload or {}),
     }

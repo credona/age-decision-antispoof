@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any
 
 import cv2
 import numpy as np
@@ -13,7 +13,7 @@ class ScreenPatternHeuristicResult:
     threshold: float
     label: str
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the result to a serializable dictionary."""
         return {
             "score": self.score,
@@ -63,8 +63,8 @@ class ScreenPatternHeuristicAnalyzer:
 
         mask = np.ones_like(magnitude, dtype=np.uint8)
         mask[
-            center_h - radius:center_h + radius,
-            center_w - radius:center_w + radius,
+            center_h - radius : center_h + radius,
+            center_w - radius : center_w + radius,
         ] = 0
 
         high_freq_energy = float(np.mean(magnitude[mask == 1]))

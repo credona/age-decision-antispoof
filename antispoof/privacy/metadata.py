@@ -1,7 +1,7 @@
-from typing import Any, Dict
+from typing import Any
 
 
-def build_privacy_metadata() -> Dict[str, Any]:
+def build_privacy_metadata() -> dict[str, Any]:
     """Return privacy metadata describing how the input image is handled.
 
     The anti-spoofing service processes the uploaded image in memory only.

@@ -12,8 +12,8 @@ from antispoof.core import build_request_context
 from antispoof.exceptions import AntiSpoofError
 from antispoof.models.loader import AntiSpoofModelLoader
 from antispoof.privacy import build_privacy_metadata
+from antispoof.project import project_metadata
 from antispoof.utils.logger import log_event
-from antispoof.version import APP_NAME, APP_VERSION
 
 THRESHOLD = float(os.getenv("ANTISPOOF_THRESHOLD", "0.5"))
 
@@ -21,7 +21,7 @@ MODEL_WEIGHT = float(os.getenv("MODEL_WEIGHT", "0.7"))
 TEXTURE_WEIGHT = float(os.getenv("TEXTURE_WEIGHT", "0.15"))
 SCREEN_WEIGHT = float(os.getenv("SCREEN_WEIGHT", "0.15"))
 
-PROVIDER = "age-decision-antispoof"
+PROVIDER = project_metadata.service_name
 MODEL_NAME = "MiniFASNetV2"
 MODEL_TYPE = "onnx"
 HEURISTICS = [
@@ -31,8 +31,8 @@ HEURISTICS = [
 ]
 
 app = FastAPI(
-    title=APP_NAME,
-    version=APP_VERSION,
+    title=project_metadata.app_name,
+    version=project_metadata.version,
 )
 
 model_loader = AntiSpoofModelLoader()
@@ -50,9 +50,16 @@ def health():
     """Return service health status."""
     return {
         "status": "ok",
-        "service": PROVIDER,
-        "version": APP_VERSION,
+        "service": project_metadata.service_name,
+        "version": project_metadata.version,
+        "contract_version": project_metadata.contract_version,
     }
+
+
+@app.get("/version")
+def version():
+    """Return service version metadata."""
+    return project_metadata.model_dump()
 
 
 @app.get("/model/status")
@@ -62,7 +69,8 @@ def model_status():
 
     return {
         "service": PROVIDER,
-        "version": APP_VERSION,
+        "version": project_metadata.version,
+        "contract_version": project_metadata.contract_version,
         "antispoof_model": {
             **model_metadata,
             "loaded": True,

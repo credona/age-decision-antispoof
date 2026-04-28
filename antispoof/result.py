@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -22,11 +22,11 @@ class AntiSpoofResult:
 
     final_score: float
     cred_antispoof_score: float
-    scores: List[float]
+    scores: list[float]
 
-    details: Dict[str, Any]
+    details: dict[str, Any]
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the result to a serializable dictionary."""
         return {
             "is_real": self.is_real,

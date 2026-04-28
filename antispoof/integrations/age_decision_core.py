@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 
 from antispoof.exceptions import FaceDetectionUnavailableError
@@ -23,7 +21,7 @@ class AgeDecisionCoreFaceDetector:
 
         self.detector = FaceDetector()
 
-    def detect_and_crop(self, image: np.ndarray) -> Optional[np.ndarray]:
+    def detect_and_crop(self, image: np.ndarray) -> np.ndarray | None:
         """Detect the primary face and return its cropped image."""
         faces = self.detector.detect(image)
 

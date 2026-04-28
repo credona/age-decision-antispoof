@@ -20,6 +20,8 @@ COPY antispoof ./antispoof
 COPY scripts ./scripts
 COPY pyproject.toml .
 COPY setup.cfg .
+COPY project.json .
+COPY compatibility.json .
 
 EXPOSE 8001
 
