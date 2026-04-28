@@ -60,7 +60,7 @@ contract_version
 Download model files locally:
 
 ```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/models/download_models.py
 ```
 
 Expected file:
@@ -78,7 +78,7 @@ Model binaries are not intended to be committed to Git or embedded in Docker ima
 ```bash
 docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up -d --build
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/models/download_models.py
 ```
 
 View logs:
@@ -108,7 +108,7 @@ Example response:
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0"
 }
 ```
@@ -129,7 +129,7 @@ Example response:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
@@ -150,7 +150,7 @@ Example response:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "antispoof_model": {
     "type": "onnx",
@@ -291,7 +291,7 @@ Generated view:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",

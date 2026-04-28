@@ -37,7 +37,7 @@ It does not perform identity verification, face recognition, document verificati
 cp .env.example.dev .env
 docker compose -f docker-compose.dev.yml down -v
 docker compose -f docker-compose.dev.yml up -d --build
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/models/download_models.py
 ```
 
 Check the service:
@@ -55,7 +55,7 @@ Expected health response:
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0"
 }
 ```
@@ -68,7 +68,7 @@ Expected version response:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
@@ -86,6 +86,29 @@ curl -X POST http://localhost:8001/check \
 ```
 
 <hr>
+
+<h2>Developer workflow</h2>
+
+Run the complete local validation command:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof scripts/dev/check_local.sh
+```
+
+Update all generated files:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof scripts/dev/update_all.sh
+```
+
+Prepare a release locally:
+
+```bash
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof scripts/ci/release_prepare.sh
+```
+
+<hr>
+
 
 <h2>Public contract</h2>
 
@@ -120,7 +143,7 @@ Compatibility metadata is declared in `compatibility.json` and checked by CI.
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
@@ -154,7 +177,7 @@ Model binaries are not intended to be embedded in the public Docker image.
 Download them explicitly:
 
 ```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/models/download_models.py
 ```
 
 Expected path:
@@ -176,7 +199,7 @@ ghcr.io/credona/age-decision-antispoof
 Run with mounted models:
 
 ```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/models/download_models.py
 
 docker run --rm \
   -p 8001:8001 \
@@ -205,16 +228,16 @@ Run quality checks:
 ```bash
 docker compose -f docker-compose.dev.yml exec age-decision-antispoof ruff check .
 docker compose -f docker-compose.dev.yml exec age-decision-antispoof ruff format --check .
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/check_project_metadata.py
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/check_compatibility_metadata.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/metadata/check_project_metadata.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/metadata/check_compatibility_metadata.py
 ```
 
 Update generated documentation blocks:
 
 ```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/update_readme_examples.py
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/update_docs_usage.py
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/update_docs_compatibility.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/docs/update_readme_examples.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/docs/update_docs_usage.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/docs/update_docs_compatibility.py
 ```
 
 <hr>
@@ -222,7 +245,7 @@ docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scri
 <h2>Testing</h2>
 
 ```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_models.py
+docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/models/download_models.py
 docker compose -f docker-compose.dev.yml exec age-decision-antispoof pytest
 ```
 

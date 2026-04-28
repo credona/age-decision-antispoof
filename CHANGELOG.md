@@ -5,6 +5,17 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 Global project direction is tracked in the central Age Decision repository.
 
 
+<h2>2.2.0</h2>
+
+<ul>
+  <li>Added one-command local validation.</li>
+  <li>Added one-command release preparation.</li>
+  <li>Reorganized developer, CI, metadata, documentation, model, benchmark, and release scripts.</li>
+  <li>Added automatic release tagging from project metadata after main CI success.</li>
+  <li>Aligned release and Docker workflows with tag-triggered automation.</li>
+</ul>
+<hr>
+
 <h2>2.1.0</h2>
 
 - Added centralized project metadata through `project.json`.
