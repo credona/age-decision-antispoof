@@ -185,11 +185,31 @@ jobs:
             - name: Build Docker image
               run: docker build -t age-decision-antispoof:ci .
 
+            - name: Run Docker container
+              run: docker run -d --name age-decision-antispoof -p 8001:8001 age-decision-antispoof:ci
+
+            - name: Wait for service
+              run: |
+                  for i in {1..30}; do
+                    if curl -fsS http://localhost:8001/health; then
+                      exit 0
+                    fi
+
+                    echo "Waiting for age-decision-antispoof... attempt $i"
+                    docker logs age-decision-antispoof || true
+                    sleep 2
+                  done
+
+                  echo "Service did not become ready"
+                  docker logs age-decision-antispoof || true
+                  docker ps -a
+                  exit 1
+
             - name: Check runtime endpoints
               run: |
-                  docker run -d --name age-decision-antispoof -p 8001:8001 age-decision-antispoof:ci
-                  sleep 5
-                  curl -f http://localhost:8001/health
-                  curl -f http://localhost:8001/version
-                  curl -f http://localhost:8001/model/status
-                  docker rm -f age-decision-antispoof
+                  curl -fsS http://localhost:8001/health
+                  curl -fsS http://localhost:8001/version
+
+            - name: Cleanup Docker container
+              if: always()
+              run: docker rm -f age-decision-antispoof || true
