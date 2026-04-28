@@ -1,50 +1,30 @@
-# Git
 .git
-.gitignore
+.github
+.vscode
+.idea
 
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.pytest_cache/
-
-# Virtual env
+__pycache__
+.pytest_cache
+.mypy_cache
+.ruff_cache
 .venv
-venv/
-
-# Tests
-tests/
-
-# Benchmarks / datasets (très lourd)
-benchmarks/
-
-# Local env
+venv
+env
 .env
 .env.*
 
-# IDE
-.vscode/
-.idea/
-
-# OS
+*.pyc
+*.pyo
+*.pyd
 .DS_Store
-
-# Logs
 *.log
 
-# Docker dev only
+test-face.jpg
+tests
 docker-compose.dev.yml
 Dockerfile.dev
 
-*.md
-!README.md
+benchmarks/datasets/celeba_spoof/images/
+benchmarks/datasets/celeba_spoof/labels.csv
 
-# Model binaries
-antispoof/models
-antispoof/models/*.onnx
-antispoof/models/**/*.onnx
-antispoof/models/*.bin
-antispoof/models/*.pt
-antispoof/models/*.pth
-antispoof/models/*.tflite
+antispoof/models/

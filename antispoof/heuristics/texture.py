@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any
 
 import cv2
 import numpy as np
@@ -13,7 +13,7 @@ class TextureHeuristicResult:
     threshold: float
     label: str
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the result to a serializable dictionary."""
         return {
             "score": self.score,

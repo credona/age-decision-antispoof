@@ -4,6 +4,33 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+
+<h2>2.1.0</h2>
+
+- Added centralized project metadata through `project.json`.
+- Added `antispoof/project.py` to load project metadata from a single source of truth.
+- Added `/version` endpoint exposing service metadata, version, contract version, repository and image.
+- Added `version` and `contract_version` fields to `/health`.
+- Added `contract_version` to `/model/status`.
+- Updated FastAPI metadata to use `project.json` for application title and version.
+- Updated structured logs to use service name, version and contract version from project metadata.
+- Kept `antispoof/version.py` as a backward-compatible metadata bridge.
+- Added compatibility metadata through `compatibility.json`.
+- Added version contract tests for `/health`, `/version`, project metadata and compatibility metadata.
+- Added generated documentation blocks for health, version and compatibility examples.
+- Added project, compatibility and release metadata validation scripts.
+- Added generated documentation synchronization scripts.
+- Added `docs/compatibility.md` for contract stability, versioning and compatibility rules.
+- Added unified CI graph with quality, metadata, tests, contract compatibility and Docker runtime jobs.
+- Added quality checks with Ruff linting, Ruff formatting and Python compilation.
+- Added `requirements.dev.txt` for development and quality tooling.
+- Added EditorConfig-based whitespace normalization.
+- Added VS Code workspace settings for save-time formatting and whitespace cleanup and extension recommendations.
+- Updated Docker ignore and Git ignore rules to align with metadata, documentation and model binary policy.
+- Updated README, usage and contributing documentation for v2.1.0 metadata and compatibility rules.
+- Made optional benchmark image integration test skip when image assets are not available locally.
+- Reformatted Python source and tests with Ruff.
+
 <hr>
 
 <h2>2.0.0</h2>

@@ -1,15 +1,15 @@
-import os
 import argparse
 import csv
+import os
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Dict, Iterable
-
+from typing import Any
 
 HF_DATASET_NAME = "nguyenkhoa/celeba-spoof-for-face-antispoofing-test"
 
 
 def _write_labels_csv(
-    rows: Iterable[Dict[str, Any]],
+    rows: Iterable[dict[str, Any]],
     output_csv_path: Path,
 ) -> int:
     """Write normalized benchmark labels to CSV."""
@@ -70,8 +70,7 @@ def _download_celeba_spoof_from_huggingface(output_dir: Path, limit: int) -> Non
         from datasets import load_dataset
     except ImportError as exc:
         raise RuntimeError(
-            "Missing optional dependency: datasets. "
-            "Install it with: pip install datasets pillow"
+            "Missing optional dependency: datasets. Install it with: pip install datasets pillow"
         ) from exc
 
     dataset = load_dataset(
@@ -83,7 +82,7 @@ def _download_celeba_spoof_from_huggingface(output_dir: Path, limit: int) -> Non
     image_dir = output_dir / "images"
     image_dir.mkdir(parents=True, exist_ok=True)
 
-    rows: list[Dict[str, str]] = []
+    rows: list[dict[str, str]] = []
 
     for index, sample in enumerate(dataset):
         if index >= limit:

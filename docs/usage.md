@@ -38,6 +38,21 @@ The three scoring weights must sum to `1.0`.
 
 They are not exposed in the public `/check` response.
 
+Project identity metadata is stored in:
+
+```text
+project.json
+```
+
+Runtime environment files must not override:
+
+```text
+service_name
+app_name
+version
+contract_version
+```
+
 <hr>
 
 <h2>Model setup</h2>
@@ -88,13 +103,39 @@ curl -i http://localhost:8001/health
 
 Example response:
 
+<!-- BEGIN:HEALTH_RESPONSE -->
 ```json
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "2.0.0"
+  "version": "2.1.0",
+  "contract_version": "2.0"
 }
 ```
+<!-- END:HEALTH_RESPONSE -->
+
+<hr>
+
+<h2>Version</h2>
+
+```bash
+curl -i http://localhost:8001/version
+```
+
+Example response:
+
+<!-- BEGIN:VERSION_RESPONSE -->
+```json
+{
+  "service_name": "age-decision-antispoof",
+  "app_name": "Age Decision AntiSpoof",
+  "version": "2.1.0",
+  "contract_version": "2.0",
+  "repository": "https://github.com/credona/age-decision-antispoof",
+  "image": "ghcr.io/credona/age-decision-antispoof"
+}
+```
+<!-- END:VERSION_RESPONSE -->
 
 <hr>
 
@@ -109,7 +150,8 @@ Example response:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.0.0",
+  "version": "2.1.0",
+  "contract_version": "2.0",
   "antispoof_model": {
     "type": "onnx",
     "name": "MiniFASNetV2",
@@ -174,7 +216,6 @@ Example response:
 }
 ```
 
-
 <hr>
 
 <h2>Public privacy contract</h2>
@@ -188,7 +229,6 @@ The public `/check` response does not expose:
 - calibration details
 - internal threshold value
 - legacy `cred_score` alias
-
 
 <hr>
 
@@ -234,6 +274,43 @@ print(result.is_real)
 print(result.cred_antispoof_score)
 print(result.to_dict())
 ```
+
+<hr>
+
+<h2>Compatibility metadata</h2>
+
+Compatibility metadata is declared in:
+
+```text
+compatibility.json
+```
+
+Generated view:
+
+<!-- BEGIN:COMPATIBILITY_METADATA -->
+```json
+{
+  "service": "age-decision-antispoof",
+  "version": "2.1.0",
+  "contract_version": "2.0",
+  "compatible_with": {
+    "age-decision-api": ">=2.0.0 <3.0.0",
+    "age-decision-js": ">=2.0.0 <3.0.0"
+  },
+  "public_contract": {
+    "decision_values": [
+      "real",
+      "spoof"
+    ],
+    "score_field": "cred_antispoof_score",
+    "raw_model_scores_exposed": false,
+    "heuristic_details_exposed": false,
+    "calibration_details_exposed": false,
+    "legacy_cred_score_exposed": false
+  }
+}
+```
+<!-- END:COMPATIBILITY_METADATA -->
 
 <hr>
 

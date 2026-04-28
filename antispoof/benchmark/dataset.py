@@ -1,8 +1,6 @@
 import csv
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
-
 
 SUPPORTED_LABELS = {"real", "spoof"}
 
@@ -15,7 +13,7 @@ class BenchmarkSample:
     label: str
 
 
-def load_benchmark_labels(csv_path: str | Path) -> List[BenchmarkSample]:
+def load_benchmark_labels(csv_path: str | Path) -> list[BenchmarkSample]:
     """Load benchmark samples from a CSV file.
 
     Expected CSV columns:
@@ -31,7 +29,7 @@ def load_benchmark_labels(csv_path: str | Path) -> List[BenchmarkSample]:
     if not resolved_csv_path.exists():
         raise FileNotFoundError(f"Benchmark labels file not found: {resolved_csv_path}")
 
-    samples: List[BenchmarkSample] = []
+    samples: list[BenchmarkSample] = []
 
     with resolved_csv_path.open("r", encoding="utf-8", newline="") as file:
         reader = csv.DictReader(file)
@@ -43,9 +41,7 @@ def load_benchmark_labels(csv_path: str | Path) -> List[BenchmarkSample]:
         missing_columns = required_columns - set(reader.fieldnames)
 
         if missing_columns:
-            raise ValueError(
-                f"Benchmark labels CSV is missing columns: {sorted(missing_columns)}"
-            )
+            raise ValueError(f"Benchmark labels CSV is missing columns: {sorted(missing_columns)}")
 
         for row_index, row in enumerate(reader, start=2):
             image_path = row["image_path"].strip()
@@ -55,9 +51,7 @@ def load_benchmark_labels(csv_path: str | Path) -> List[BenchmarkSample]:
                 raise ValueError(f"Missing image_path at CSV line {row_index}")
 
             if label not in SUPPORTED_LABELS:
-                raise ValueError(
-                    f"Unsupported label at CSV line {row_index}: {label}"
-                )
+                raise ValueError(f"Unsupported label at CSV line {row_index}: {label}")
 
             samples.append(
                 BenchmarkSample(

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from antispoof import AntiSpoof
 from antispoof.benchmark.dataset import load_benchmark_labels
@@ -10,7 +10,7 @@ from antispoof.metrics import compute_error_rates
 def run_local_benchmark(
     dataset_dir: str | Path = "benchmarks/datasets/celeba_spoof",
     threshold_step: float = 0.01,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run local benchmark evaluation and threshold tuning.
 
     The benchmark expects a labels.csv file and local image files.

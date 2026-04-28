@@ -1,5 +1,5 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from antispoof.metrics import AntiSpoofMetrics, compute_error_rates
 
@@ -55,10 +55,7 @@ def tune_threshold(
     best_result: ThresholdTuningResult | None = None
 
     for threshold in _build_candidate_thresholds(step):
-        predicted_labels = [
-            _score_to_label(score, threshold)
-            for score in real_scores
-        ]
+        predicted_labels = [_score_to_label(score, threshold) for score in real_scores]
 
         metrics = compute_error_rates(ground_truth_labels, predicted_labels)
         current_result = ThresholdTuningResult(

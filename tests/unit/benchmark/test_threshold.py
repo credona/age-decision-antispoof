@@ -39,6 +39,4 @@ def test_tune_threshold_rejects_invalid_step():
     with pytest.raises(ValueError) as exc:
         tune_threshold(["real"], [0.8], step=0.0)
 
-    assert str(exc.value) == (
-        "Threshold step must be greater than 0.0 and lower or equal to 1.0."
-    )
+    assert str(exc.value) == ("Threshold step must be greater than 0.0 and lower or equal to 1.0.")

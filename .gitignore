@@ -1,17 +1,23 @@
+.env
+
+.venv/
+venv/
+env/
 __pycache__/
 *.pyc
 .pytest_cache/
-.venv/
-.env
+.mypy_cache/
+.ruff_cache/
+.DS_Store
 
 benchmarks/datasets/celeba_spoof/images/
 benchmarks/datasets/celeba_spoof/labels.csv
 
-# Model binaries
-antispoof/models/*.onnx
-antispoof/models/**/*.onnx
-antispoof/models/*.bin
-antispoof/models/*.pt
-antispoof/models/*.pth
-antispoof/models/*.tflite
+antispoof/models/**
 !antispoof/models/.gitkeep
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
