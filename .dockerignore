@@ -27,4 +27,10 @@ Dockerfile.dev
 benchmarks/datasets/celeba_spoof/images/
 benchmarks/datasets/celeba_spoof/labels.csv
 
-antispoof/models/
+# Model binaries
+antispoof/models/*.onnx
+antispoof/models/**/*.onnx
+antispoof/models/*.bin
+antispoof/models/*.pt
+antispoof/models/*.pth
+antispoof/models/*.tflite
