@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 
 from antispoof.api.main import app
@@ -6,14 +9,16 @@ client = TestClient(app)
 
 
 def test_version_returns_project_metadata():
+    project = json.loads(Path("project.json").read_text(encoding="utf-8"))
+
     response = client.get("/version")
 
     assert response.status_code == 200
     assert response.json() == {
-        "service_name": "age-decision-antispoof",
-        "app_name": "Age Decision AntiSpoof",
-        "version": "2.1.0",
-        "contract_version": "2.0",
-        "repository": "https://github.com/credona/age-decision-antispoof",
-        "image": "ghcr.io/credona/age-decision-antispoof",
+        "service_name": project["service_name"],
+        "app_name": project["app_name"],
+        "version": project["version"],
+        "contract_version": project["contract_version"],
+        "repository": project["repository"],
+        "image": project["image"],
     }

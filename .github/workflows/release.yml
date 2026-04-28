@@ -10,43 +10,31 @@ permissions:
 
 jobs:
     release:
-        name: Create GitHub release
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v6
+            - uses: actions/checkout@v6
 
-            - name: Set up Python
-              uses: actions/setup-python@v6
+            - uses: actions/setup-python@v6
               with:
                   python-version: "3.11"
 
-            - name: Check release metadata
-              run: python scripts/check_release_metadata.py
+            - run: python scripts/metadata/check_release_metadata.py
+            - run: python scripts/metadata/check_project_metadata.py
+            - run: python scripts/metadata/check_compatibility_metadata.py
 
-            - name: Check project metadata
-              run: python scripts/check_project_metadata.py
-
-            - name: Check compatibility metadata
-              run: python scripts/check_compatibility_metadata.py
-
-            - name: Check generated README examples
-              run: |
-                  python scripts/update_readme_examples.py
+            - run: |
+                  python scripts/docs/update_readme_examples.py
                   git diff --exit-code README.md
 
-            - name: Check generated usage examples
-              run: |
-                  python scripts/update_docs_usage.py
+            - run: |
+                  python scripts/docs/update_docs_usage.py
                   git diff --exit-code docs/usage.md
 
-            - name: Check generated compatibility documentation
-              run: |
-                  python scripts/update_docs_compatibility.py
+            - run: |
+                  python scripts/docs/update_docs_compatibility.py
                   git diff --exit-code docs/compatibility.md
 
-            - name: Create release with generated notes
-              uses: softprops/action-gh-release@v3
+            - uses: softprops/action-gh-release@v3
               with:
                   generate_release_notes: true

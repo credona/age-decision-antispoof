@@ -59,7 +59,7 @@ Generated view:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
@@ -85,7 +85,7 @@ Generated view:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
@@ -283,9 +283,9 @@ COMPATIBILITY_METADATA
 They are updated by:
 
 ```bash
-python scripts/update_readme_examples.py
-python scripts/update_docs_usage.py
-python scripts/update_docs_compatibility.py
+python scripts/docs/update_readme_examples.py
+python scripts/docs/update_docs_usage.py
+python scripts/docs/update_docs_compatibility.py
 ```
 
 CI fails if generated documentation is not synchronized.

@@ -1,13 +1,16 @@
 {
   "service": "age-decision-antispoof",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "contract_version": "2.0",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
     "age-decision-js": ">=2.0.0 <3.0.0"
   },
   "public_contract": {
-    "decision_values": ["real", "spoof"],
+    "decision_values": [
+      "real",
+      "spoof"
+    ],
     "score_field": "cred_antispoof_score",
     "raw_model_scores_exposed": false,
     "heuristic_details_exposed": false,

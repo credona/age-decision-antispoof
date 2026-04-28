@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import cv2
 import numpy as np
 from fastapi.testclient import TestClient
@@ -29,7 +32,8 @@ def test_health():
     assert payload["status"] == "ok"
     assert payload["service"] == "age-decision-antispoof"
     assert "version" in payload
-    assert payload["version"] == "2.1.0"
+    project = json.loads(Path("project.json").read_text(encoding="utf-8"))
+    assert payload["version"] == project["version"]
     assert payload["contract_version"] == "2.0"
 
 
@@ -52,7 +56,8 @@ def test_model_status():
     assert payload["antispoof_model"]["name"] == "MiniFASNetV2"
     assert "path" in payload["antispoof_model"]
     assert payload["antispoof_model"]["exists"] is True
-    assert payload["version"] == "2.1.0"
+    project = json.loads(Path("project.json").read_text(encoding="utf-8"))
+    assert payload["version"] == project["version"]
     assert payload["contract_version"] == "2.0"
 
 

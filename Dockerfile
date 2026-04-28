@@ -5,10 +5,10 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
+    git \
     libglib2.0-0 \
     libgl1 \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -22,6 +22,8 @@ COPY pyproject.toml .
 COPY setup.cfg .
 COPY project.json .
 COPY compatibility.json .
+
+RUN chmod +x scripts/dev/*.sh scripts/ci/*.sh || true
 
 EXPOSE 8001
 

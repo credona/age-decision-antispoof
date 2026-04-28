@@ -44,7 +44,7 @@ jobs:
               run: |
                   FAILED=0
 
-                  for file in $(find antispoof tests scripts docs -type f \( -name "*.py" -o -name "*.md" \)); do
+                  for file in $(find antispoof tests scripts docs -type f \( -name "*.py" -o -name "*.md" -o -name "*.sh" \)); do
                     if [ -s "$file" ]; then
                       if [ "$(tail -c1 "$file")" != "" ]; then
                         echo "Missing final newline: $file"
@@ -53,7 +53,7 @@ jobs:
                     fi
                   done
 
-                  for file in README.md CHANGELOG.md CONTRIBUTING.md pyproject.toml project.json compatibility.json; do
+                  for file in README.md CHANGELOG.md CONTRIBUTING.md pyproject.toml setup.cfg project.json compatibility.json; do
                     if [ -f "$file" ] && [ -s "$file" ]; then
                       if [ "$(tail -c1 "$file")" != "" ]; then
                         echo "Missing final newline: $file"
@@ -70,8 +70,7 @@ jobs:
     metadata:
         name: Metadata and generated docs
         runs-on: ubuntu-latest
-        needs:
-            - quality
+        needs: [quality]
 
         steps:
             - name: Checkout repository
@@ -83,32 +82,30 @@ jobs:
                   python-version: "3.11"
 
             - name: Check project metadata
-              run: python scripts/check_project_metadata.py
+              run: python scripts/metadata/check_project_metadata.py
 
             - name: Check compatibility metadata
-              run: python scripts/check_compatibility_metadata.py
+              run: python scripts/metadata/check_compatibility_metadata.py
 
             - name: Check generated README examples
               run: |
-                  python scripts/update_readme_examples.py
+                  python scripts/docs/update_readme_examples.py
                   git diff --exit-code README.md
 
             - name: Check generated usage examples
               run: |
-                  python scripts/update_docs_usage.py
+                  python scripts/docs/update_docs_usage.py
                   git diff --exit-code docs/usage.md
 
             - name: Check generated compatibility documentation
               run: |
-                  python scripts/update_docs_compatibility.py
+                  python scripts/docs/update_docs_compatibility.py
                   git diff --exit-code docs/compatibility.md
 
     tests:
         name: Tests
         runs-on: ubuntu-latest
-        needs:
-            - quality
-            - metadata
+        needs: [metadata]
 
         steps:
             - name: Checkout repository
@@ -130,7 +127,7 @@ jobs:
                   pip install -r requirements.txt
 
             - name: Download model files
-              run: python scripts/download_models.py
+              run: python scripts/models/download_models.py
 
             - name: Run tests
               run: pytest
@@ -138,8 +135,7 @@ jobs:
     compatibility:
         name: Contract compatibility
         runs-on: ubuntu-latest
-        needs:
-            - tests
+        needs: [tests]
 
         steps:
             - name: Checkout repository
@@ -161,7 +157,7 @@ jobs:
                   pip install -r requirements.txt
 
             - name: Download model files
-              run: python scripts/download_models.py
+              run: python scripts/models/download_models.py
 
             - name: Run contract tests
               run: pytest tests/unit/contract
@@ -178,18 +174,28 @@ jobs:
         needs: [compatibility]
 
         steps:
-            - uses: actions/checkout@v6
+            - name: Checkout repository
+              uses: actions/checkout@v6
 
             - name: Build Docker image
               run: docker build -t age-decision-antispoof:ci .
 
-            - name: Download model into Docker volume
+            - name: Create model volume
+              run: docker volume create antispoof-models-ci
+
+            - name: Download models into volume
               run: |
-                  docker volume create antispoof-models-ci
                   docker run --rm \
                     -v antispoof-models-ci:/app/antispoof/models \
                     age-decision-antispoof:ci \
-                    python scripts/download_models.py
+                    python scripts/models/download_models.py
+
+            - name: Verify models exist in volume
+              run: |
+                  docker run --rm \
+                    -v antispoof-models-ci:/app/antispoof/models \
+                    age-decision-antispoof:ci \
+                    test -f /app/antispoof/models/MiniFASNetV2.onnx
 
             - name: Run Docker container
               run: |
@@ -227,3 +233,29 @@ jobs:
               run: |
                   docker rm -f age-decision-antispoof || true
                   docker volume rm antispoof-models-ci || true
+
+    auto-tag:
+        name: Automatic release tag
+        runs-on: ubuntu-latest
+        needs: [docker-runtime]
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Set up Python
+              uses: actions/setup-python@v6
+              with:
+                  python-version: "3.11"
+
+            - name: Create tag from project metadata
+              env:
+                  AGE_DECISION_RELEASE_TOKEN: ${{ secrets.AGE_DECISION_RELEASE_TOKEN }}
+              run: python scripts/release/create_tag_from_project.py
