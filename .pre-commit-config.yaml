@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: age-decision-antispoof-fix
+        name: age-decision-antispoof-fix
+        entry: ./scripts/ci/fix_all_docker.sh
+        language: system
+        pass_filenames: false

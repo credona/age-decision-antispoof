@@ -19,13 +19,11 @@ This document applies to the public behavior of this repository:
 - project metadata
 - compatibility metadata
 
-Internal implementation details are not considered stable unless explicitly documented.
+Internal implementation details are not stable unless explicitly documented.
 
 <hr>
 
 <h2>Stable public endpoints</h2>
-
-The following endpoints are part of the public service contract:
 
 ```text
 GET /health
@@ -59,8 +57,8 @@ Generated view:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.2.0",
-  "contract_version": "2.0",
+  "version": "2.2.1",
+  "contract_version": "2.2",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
 }
@@ -79,14 +77,16 @@ Compatibility metadata is stored in:
 compatibility.json
 ```
 
+It is synchronized from `project.json`.
+
 Generated view:
 
 <!-- BEGIN:COMPATIBILITY_METADATA -->
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.2.0",
-  "contract_version": "2.0",
+  "version": "2.2.1",
+  "contract_version": "2.2",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
     "age-decision-js": ">=2.0.0 <3.0.0"
@@ -106,15 +106,11 @@ Generated view:
 ```
 <!-- END:COMPATIBILITY_METADATA -->
 
-This file is machine-readable and checked by CI.
-
-It is not a replacement for cross-repository integration tests.
-
 <hr>
 
 <h2>Stable public fields</h2>
 
-The main `/check` response exposes the following public fields:
+The main `/check` response exposes:
 
 ```text
 request_id
@@ -135,8 +131,6 @@ These fields should remain stable throughout the v2.x release line.
 
 <h2>Decision values</h2>
 
-The public decision field uses:
-
 ```text
 real
 spoof
@@ -155,8 +149,6 @@ Age Decision AntiSpoof owns:
 ```text
 cred_antispoof_score
 ```
-
-This score represents the confidence of the anti-spoofing decision produced by this service.
 
 AntiSpoof does not own:
 
@@ -184,8 +176,6 @@ biometric embeddings
 legacy cred_score alias
 ```
 
-This rule protects downstream integrations from depending on sensitive or unstable internals.
-
 <hr>
 
 <h2>Backward-compatible changes</h2>
@@ -199,6 +189,8 @@ The following changes are considered backward-compatible in v2.x:
 - adding tests
 - adding documentation
 - adding CI checks
+- improving developer workflow scripts
+- improving release automation
 
 <hr>
 
@@ -246,27 +238,21 @@ Compatibility is checked through:
 - privacy response tests
 - project metadata checks
 - compatibility metadata checks
-- Docker runtime checks
+- Docker metadata checks
 - release tag checks
+- generated documentation checks
 
-The compatibility workflow is a baseline for v2.1.0.
+Run all checks:
 
-Cross-repository integration tests are tracked separately in the global roadmap.
-
-<hr>
-
-<h2>Release checks</h2>
-
-On tag release, CI verifies that the Git tag matches the version declared in `project.json`.
-
-Example:
-
-```text
-project.json version: 2.1.0
-expected Git tag: v2.1.0
+```bash
+./scripts/ci/check_all_docker.sh
 ```
 
-A mismatched tag must fail the release workflow.
+Auto-fix generated files and run checks:
+
+```bash
+./scripts/ci/fix_all_docker.sh
+```
 
 <hr>
 
@@ -280,15 +266,28 @@ VERSION_RESPONSE
 COMPATIBILITY_METADATA
 ```
 
-They are updated by:
+Do not edit generated blocks manually.
+
+Use:
 
 ```bash
-python scripts/docs/update_readme_examples.py
-python scripts/docs/update_docs_usage.py
-python scripts/docs/update_docs_compatibility.py
+./scripts/ci/fix_all_docker.sh
 ```
 
-CI fails if generated documentation is not synchronized.
+<hr>
+
+<h2>Release checks</h2>
+
+On tag release, CI verifies that the Git tag matches the version declared in `project.json`.
+
+Example:
+
+```text
+project.json version: 2.2.1
+expected Git tag: v2.2.1
+```
+
+A mismatched tag must fail the release workflow.
 
 <hr>
 

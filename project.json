@@ -1,8 +1,41 @@
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.2.0",
-  "contract_version": "2.0",
+  "version": "2.2.1",
+  "contract_version": "2.2",
   "repository": "https://github.com/credona/age-decision-antispoof",
-  "image": "ghcr.io/credona/age-decision-antispoof"
+  "image": "ghcr.io/credona/age-decision-antispoof",
+  "license": "Apache-2.0",
+  "docker": {
+    "dev": {
+      "dockerfile": "Dockerfile.dev",
+      "image": "age-decision-antispoof-dev",
+      "title": "Age Decision AntiSpoof Dev",
+      "description": "Development image for the Age Decision AntiSpoof service."
+    },
+    "prod": {
+      "dockerfile": "Dockerfile",
+      "image": "age-decision-antispoof",
+      "title": "Age Decision AntiSpoof",
+      "description": "Privacy-first anti-spoofing service for Age Decision."
+    }
+  },
+  "runtime": {
+    "dev": {
+      "ANTISPOOF_PORT": "8001",
+      "MODEL_PATH": "models/MiniFASNetV2.onnx",
+      "USE_MOCK_MODEL": "false",
+      "SPOOF_THRESHOLD": "0.7",
+      "LOG_LEVEL": "INFO",
+      "LOG_FORMAT": "json"
+    },
+    "prod": {
+      "ANTISPOOF_PORT": "8001",
+      "MODEL_PATH": "models/MiniFASNetV2.onnx",
+      "USE_MOCK_MODEL": "false",
+      "SPOOF_THRESHOLD": "0.7",
+      "LOG_LEVEL": "INFO",
+      "LOG_FORMAT": "json"
+    }
+  }
 }
