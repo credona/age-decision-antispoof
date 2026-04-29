@@ -159,23 +159,23 @@ jobs:
             - name: Download models into volume
               run: |
                   docker run --rm \
-                    -v antispoof-models-ci:/app/models \
+                    -v antispoof-models-ci:/app/antispoof/models \
                     age-decision-antispoof:ci \
                     python scripts/models/download_models.py
 
             - name: Verify models exist in volume
               run: |
                   docker run --rm \
-                    -v antispoof-models-ci:/app/models \
+                    -v antispoof-models-ci:/app/antispoof/models \
                     age-decision-antispoof:ci \
-                    test -f /app/models/MiniFASNetV2.onnx
+                    test -f /app/antispoof/models/MiniFASNetV2.onnx
 
             - name: Run Docker container
               run: |
                   docker run -d \
                     --name age-decision-antispoof \
                     -p 8001:8001 \
-                    -v antispoof-models-ci:/app/models \
+                    -v antispoof-models-ci:/app/antispoof/models \
                     age-decision-antispoof:ci
 
             - name: Wait for service
