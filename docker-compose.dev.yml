@@ -2,14 +2,23 @@ services:
   age-decision-antispoof:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: ${AGE_DECISION_ANTISPOOF_DOCKERFILE}
+      args:
+        VERSION: ${AGE_DECISION_ANTISPOOF_VERSION}
+        REPOSITORY: ${AGE_DECISION_ANTISPOOF_REPOSITORY}
+        TITLE: ${AGE_DECISION_ANTISPOOF_TITLE}
+        DESCRIPTION: ${AGE_DECISION_ANTISPOOF_DESCRIPTION}
+        LICENSE: ${AGE_DECISION_ANTISPOOF_LICENSE}
+    image: ${AGE_DECISION_ANTISPOOF_IMAGE}:${AGE_DECISION_ANTISPOOF_VERSION}
     container_name: age-decision-antispoof
     ports:
-      - "${ANTISPOOF_PORT:-8001}:8001"
+      - "${ANTISPOOF_PORT}:8001"
     env_file:
-      - .env
+      - .generated/runtime/dev.env
     volumes:
       - .:/app
+      - ./models:/app/models
+    command: uvicorn antispoof.api.main:app --host 0.0.0.0 --port 8001 --reload
     networks:
       - age-decision-network
 

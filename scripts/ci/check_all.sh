@@ -33,14 +33,9 @@ python -m compileall antispoof tests scripts
 python scripts/metadata/check_project_metadata.py
 python scripts/metadata/check_compatibility_metadata.py
 python scripts/docs/update_readme_examples.py
-git diff --exit-code README.md
-python scripts/docs/update_docs_usage.py
-git diff --exit-code docs/usage.md
-python scripts/docs/update_docs_compatibility.py
-git diff --exit-code docs/compatibility.md
+./scripts/ci/assert_file_unchanged.sh README.md python scripts/docs/update_readme_examples.py
+./scripts/ci/assert_file_unchanged.sh docs/usage.md python scripts/docs/update_docs_usage.py
+./scripts/ci/assert_file_unchanged.sh docs/compatibility.md python scripts/docs/update_docs_compatibility.py
 pytest
-pytest tests/unit/contract
-pytest tests/unit/privacy
-pytest tests/unit/api/test_public_api.py
 
 echo "CI-equivalent check passed."

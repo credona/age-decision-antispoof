@@ -34,7 +34,7 @@ def test_health():
     assert "version" in payload
     project = json.loads(Path("project.json").read_text(encoding="utf-8"))
     assert payload["version"] == project["version"]
-    assert payload["contract_version"] == "2.0"
+    assert payload["contract_version"] == project["contract_version"]
 
 
 def test_model_status():
@@ -58,7 +58,7 @@ def test_model_status():
     assert payload["antispoof_model"]["exists"] is True
     project = json.loads(Path("project.json").read_text(encoding="utf-8"))
     assert payload["version"] == project["version"]
-    assert payload["contract_version"] == "2.0"
+    assert payload["contract_version"] == project["contract_version"]
 
 
 def test_check_with_generated_image():
