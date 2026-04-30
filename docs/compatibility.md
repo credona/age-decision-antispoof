@@ -4,6 +4,9 @@ This document describes compatibility expectations for Age Decision AntiSpoof.
 
 Age Decision AntiSpoof exposes the presentation attack detection contract used by downstream services such as the public API and SDK integrations.
 
+For ecosystem-wide compatibility policy, see:
+https://github.com/credona/age-decision/blob/main/COMPATIBILITY.md
+
 <hr>
 
 <h2>Scope</h2>
@@ -57,7 +60,7 @@ Generated view:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "contract_version": "2.2",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
@@ -85,7 +88,7 @@ Generated view:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "contract_version": "2.2",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
