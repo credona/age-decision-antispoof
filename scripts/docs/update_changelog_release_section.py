@@ -1,4 +1,4 @@
-"""Deterministically maintain the v2.2.2 release section in CHANGELOG.md."""
+"""Deterministically maintain the v2.2.3 release section in CHANGELOG.md."""
 
 from __future__ import annotations
 
@@ -7,22 +7,16 @@ from pathlib import Path
 
 CHANGELOG_PATH = Path("CHANGELOG.md")
 ANCHOR = "Global project direction is tracked in the central Age Decision repository.\n\n"
-MANAGED_VERSION = "2.2.2"
+MANAGED_VERSION = "2.2.3"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
-    (
-        "Published Docker images from version tags only; pull request workflows no "
-        "longer publish Docker images."
-    ),
-    (
-        "Release workflow builds GitHub release description from the matching "
-        "<code>CHANGELOG.md</code> section."
-    ),
-    (
-        "Release workflow validates the Git tag matches <code>project.json</code> "
-        "and that exactly one GHCR package version carries that tag."
-    ),
-    "Added manual and scheduled workflow to delete untagged GHCR Docker package versions.",
+    "Enforced documentation boundaries between global and repository-specific docs.",
+    "Removed cross-repository documentation duplication.",
+    "Normalized repository <code>README.md</code> scope.",
+    "Normalized <code>CONTRIBUTING.md</code> to local workflows.",
+    "Normalized <code>SECURITY.md</code> and <code>COMPATIBILITY.md</code> scope.",
+    "Enforced absolute GitHub links only for cross-repository documentation references.",
+    "Centralized global documentation in <code>age-decision</code>.",
 )
 
 

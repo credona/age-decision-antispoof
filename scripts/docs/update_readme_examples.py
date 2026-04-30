@@ -39,7 +39,7 @@ def replace_block(content: str, block_name: str, payload: dict) -> str:
     end = f"<!-- END:{block_name} -->"
 
     if start not in content or end not in content:
-        raise SystemExit(f"Missing generated block markers for {block_name}")
+        return content
 
     before, rest = content.split(start, 1)
     _, after = rest.split(end, 1)
