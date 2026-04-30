@@ -29,4 +29,3 @@ jobs:
                   package-name: age-decision-antispoof
                   package-type: container
                   delete-only-untagged-versions: "true"
-                  num-old-versions-to-delete: 100
