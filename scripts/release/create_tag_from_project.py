@@ -26,6 +26,14 @@ def normalize_secret(value: str | None) -> str:
     return re.sub(r"\s+", "", value or "")
 
 
+def tag_exists_locally(tag: str) -> bool:
+    return bool(run(["git", "tag", "--list", tag]))
+
+
+def tag_exists_remotely(tag: str) -> bool:
+    return bool(run(["git", "ls-remote", "--tags", "origin", f"refs/tags/{tag}"]))
+
+
 def main() -> None:
     metadata = json.loads(PROJECT_FILE.read_text(encoding="utf-8"))
     version = metadata["version"]
@@ -35,19 +43,11 @@ def main() -> None:
         print("Automatic tagging skipped because this is not main.")
         return
 
-    existing_tags = run(["git", "tag", "--list", tag])
-    if existing_tags:
+    if tag_exists_locally(tag):
         print(f"Tag already exists locally: {tag}")
         return
 
-    remote_tag = subprocess.run(
-        ["git", "ls-remote", "--tags", "origin", f"refs/tags/{tag}"],
-        check=True,
-        text=True,
-        capture_output=True,
-    ).stdout.strip()
-
-    if remote_tag:
+    if tag_exists_remotely(tag):
         print(f"Tag already exists remotely: {tag}")
         return
 
@@ -72,6 +72,10 @@ def main() -> None:
 
     run(["git", "config", "user.name", "github-actions[bot]"])
     run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"])
+    if tag_exists_locally(tag) or tag_exists_remotely(tag):
+        print(f"Tag already exists, skipping creation: {tag}")
+        return
+
     run(["git", "tag", "-a", tag, "-m", f"Release {tag}"])
     run(["git", "push", "origin", tag])
 

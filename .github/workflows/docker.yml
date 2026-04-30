@@ -57,6 +57,7 @@ jobs:
                   tags: |
                       type=ref,event=tag
                       type=raw,value=${{ inputs.release_tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
+                      type=raw,value=latest
 
             - name: Log in to GitHub Container Registry
               uses: docker/login-action@v4
@@ -71,6 +72,8 @@ jobs:
                   context: .
                   file: ${{ steps.project.outputs.dockerfile }}
                   push: true
+                  provenance: false
+                  sbom: false
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
                   build-args: |
@@ -87,26 +90,30 @@ jobs:
             - name: Validate GHCR image tag after push
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_EVENT_NAME: ${{ github.event_name }}
                   RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.ref_name }}
               run: |
                   python - <<'PY'
                   import json
+                  import os
                   import urllib.parse
                   import urllib.request
 
                   owner = "credona"
                   package_name = "age-decision-antispoof"
-                  release_tag = __import__("os").environ["RELEASE_TAG"]
+                  release_tag = os.environ["RELEASE_TAG"]
+                  event_name = os.environ["GITHUB_EVENT_NAME"]
 
-                  project_version = "${{ steps.project.outputs.version }}"
+                  if event_name == "push":
+                      with open("project.json", "r", encoding="utf-8") as f:
+                          project_version = json.load(f)["version"]
+                      expected_tag = f"v{project_version}"
+                      if release_tag != expected_tag:
+                          raise SystemExit(
+                              f"Release tag '{release_tag}' does not match project.json version '{project_version}'"
+                          )
 
-                  expected_tag = f"v{project_version}"
-                  if release_tag != expected_tag:
-                      raise SystemExit(
-                          f"Release tag '{release_tag}' does not match project.json version '{project_version}'"
-                      )
-
-                  token = __import__("os").environ["GITHUB_TOKEN"]
+                  token = os.environ["GITHUB_TOKEN"]
                   headers = {
                       "Accept": "application/vnd.github+json",
                       "Authorization": f"Bearer {token}",
