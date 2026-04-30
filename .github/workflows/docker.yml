@@ -64,3 +64,72 @@ jobs:
                       TITLE=${{ steps.project.outputs.title }}
                       DESCRIPTION=${{ steps.project.outputs.description }}
                       LICENSE=${{ steps.project.outputs.license }}
+
+            - uses: actions/setup-python@v6
+              with:
+                  python-version: "3.14"
+
+            - name: Validate GHCR image tag after push
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  RELEASE_TAG: ${{ github.ref_name }}
+              run: |
+                  python - <<'PY'
+                  import json
+                  import urllib.parse
+                  import urllib.request
+
+                  owner = "credona"
+                  package_name = "age-decision-antispoof"
+                  release_tag = __import__("os").environ["RELEASE_TAG"]
+
+                  with open("project.json", "r", encoding="utf-8") as f:
+                      project_version = json.load(f)["version"]
+
+                  expected_tag = f"v{project_version}"
+                  if release_tag != expected_tag:
+                      raise SystemExit(
+                          f"Release tag '{release_tag}' does not match project.json version '{project_version}'"
+                      )
+
+                  token = __import__("os").environ["GITHUB_TOKEN"]
+                  headers = {
+                      "Accept": "application/vnd.github+json",
+                      "Authorization": f"Bearer {token}",
+                      "X-GitHub-Api-Version": "2022-11-28",
+                  }
+
+                  encoded = urllib.parse.quote(package_name, safe="")
+                  base = (
+                      f"https://api.github.com/orgs/{owner}/packages/container/"
+                      f"{encoded}/versions?per_page=100"
+                  )
+
+                  url = base
+                  tagged_count = 0
+
+                  while url:
+                      req = urllib.request.Request(url, headers=headers)
+                      with urllib.request.urlopen(req, timeout=30) as resp:
+                          body = resp.read().decode("utf-8")
+                          versions = json.loads(body)
+                          link = resp.headers.get("Link", "")
+
+                      for version in versions:
+                          tags = version.get("metadata", {}).get("container", {}).get("tags", [])
+                          if release_tag in tags:
+                              tagged_count += 1
+
+                      next_url = None
+                      for part in link.split(","):
+                          part = part.strip()
+                          if 'rel="next"' in part:
+                              next_url = part[part.find("<") + 1 : part.find(">")]
+                              break
+                      url = next_url
+
+                  if tagged_count != 1:
+                      raise SystemExit(
+                          f"Expected exactly one GHCR version tagged '{release_tag}', found {tagged_count}"
+                      )
+                  PY
