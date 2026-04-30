@@ -53,7 +53,29 @@ jobs:
         steps:
             - uses: actions/checkout@v6
 
+            - name: Generate release notes from changelog
+              run: |
+                  python - <<'PY'
+                  import json
+                  from pathlib import Path
+
+                  version = json.loads(Path("project.json").read_text(encoding="utf-8"))["version"]
+                  changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
+                  start_marker = f"<h2>{version}</h2>"
+                  start = changelog.find(start_marker)
+                  if start == -1:
+                      raise SystemExit(f"Missing changelog section for version {version}")
+                  end = changelog.find("<hr>", start)
+                  if end == -1:
+                      end = len(changelog)
+                  section = changelog[start:end].strip()
+                  Path("RELEASE_NOTES.md").write_text(
+                      f"## {version}\n\n{section}\n",
+                      encoding="utf-8",
+                  )
+                  PY
+
             - name: Create release
               uses: softprops/action-gh-release@v3
               with:
-                  generate_release_notes: true
+                  body_path: RELEASE_NOTES.md

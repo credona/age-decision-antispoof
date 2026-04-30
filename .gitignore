@@ -18,6 +18,7 @@ benchmarks/datasets/celeba_spoof/labels.csv
 antispoof/models/**
 !antispoof/models/.gitkeep
 
+.cursor
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json

@@ -4,6 +4,17 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+<h2>2.2.2</h2>
+
+<ul>
+  <li>Published Docker images from version tags only; pull request workflows no longer publish Docker images.</li>
+  <li>Release workflow builds GitHub release description from the matching <code>CHANGELOG.md</code> section.</li>
+  <li>Release workflow validates the Git tag matches <code>project.json</code> and that exactly one GHCR package version carries that tag.</li>
+  <li>Added manual and scheduled workflow to delete untagged GHCR Docker package versions.</li>
+</ul>
+
+<hr>
+
 <h2>2.2.1</h2>
 
 <ul>

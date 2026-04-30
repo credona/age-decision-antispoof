@@ -91,6 +91,9 @@ jobs:
                   python scripts/docs/update_docs_compatibility.py
                   git diff --exit-code docs/compatibility.md
 
+                  python scripts/docs/update_changelog_release_section.py
+                  git diff --exit-code CHANGELOG.md
+
     tests:
         name: Tests
         runs-on: ubuntu-latest
