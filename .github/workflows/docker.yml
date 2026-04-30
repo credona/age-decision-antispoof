@@ -2,13 +2,8 @@ name: Docker
 
 on:
     push:
-        branches:
-            - main
         tags:
             - "v*.*.*"
-    pull_request:
-        branches:
-            - main
 
 permissions:
     contents: read
@@ -46,24 +41,21 @@ jobs:
               with:
                   images: ghcr.io/credona/age-decision-antispoof
                   tags: |
-                      type=ref,event=branch
                       type=ref,event=tag
-                      type=raw,value=latest,enable={{is_default_branch}}
 
             - name: Log in to GitHub Container Registry
-              if: github.event_name != 'pull_request'
               uses: docker/login-action@v4
               with:
                   registry: ghcr.io
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build and optionally push Docker image
+            - name: Build and push Docker image
               uses: docker/build-push-action@v7
               with:
                   context: .
                   file: ${{ steps.project.outputs.dockerfile }}
-                  push: ${{ github.event_name != 'pull_request' }}
+                  push: true
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
                   build-args: |

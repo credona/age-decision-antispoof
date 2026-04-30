@@ -36,6 +36,7 @@ python scripts/docs/update_readme_examples.py
 ./scripts/ci/assert_file_unchanged.sh README.md python scripts/docs/update_readme_examples.py
 ./scripts/ci/assert_file_unchanged.sh docs/usage.md python scripts/docs/update_docs_usage.py
 ./scripts/ci/assert_file_unchanged.sh docs/compatibility.md python scripts/docs/update_docs_compatibility.py
+./scripts/ci/assert_file_unchanged.sh CHANGELOG.md python scripts/docs/update_changelog_release_section.py
 pytest
 
 echo "CI-equivalent check passed."

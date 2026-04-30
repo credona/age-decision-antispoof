@@ -1,0 +1,22 @@
+name: Docker Cleanup
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "23 3 * * 0"
+
+permissions:
+    packages: write
+
+jobs:
+    cleanup-untagged:
+        name: Delete untagged GHCR versions
+        runs-on: ubuntu-latest
+        steps:
+            - name: Delete untagged package versions
+              uses: actions/delete-package-versions@v5
+              with:
+                  package-name: age-decision-antispoof
+                  package-type: container
+                  delete-only-untagged-versions: "true"
+                  num-old-versions-to-delete: 100
