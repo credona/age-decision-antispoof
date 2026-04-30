@@ -2,11 +2,8 @@
 
 This repository contains the AntiSpoof service.
 
-For global contribution rules, see:
-
-```text
+Global contributing policy:
 https://github.com/credona/age-decision/blob/main/CONTRIBUTING.md
-```
 
 <hr>
 
