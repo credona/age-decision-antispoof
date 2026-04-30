@@ -2,30 +2,31 @@ name: Docker Cleanup
 
 on:
     workflow_dispatch:
-    schedule:
-        - cron: "23 3 * * 0"
-    workflow_run:
-        workflows:
-            - Docker
-        types:
-            - completed
+        inputs:
+            dry_run:
+                description: "If true, only print candidates without deleting"
+                required: false
+                default: true
+                type: boolean
 
 permissions:
     packages: write
 
 jobs:
     cleanup-untagged:
-        name: Delete untagged GHCR versions
+        name: Safely cleanup untagged GHCR versions
         runs-on: ubuntu-latest
-        if: |
-            github.event_name == 'workflow_dispatch' ||
-            github.event_name == 'schedule' ||
-            (github.event_name == 'workflow_run' &&
-             github.event.workflow_run.conclusion == 'success')
         steps:
-            - name: Delete untagged package versions
-              uses: actions/delete-package-versions@v5
+            - uses: actions/checkout@v6
+
+            - uses: actions/setup-python@v6
               with:
-                  package-name: age-decision-antispoof
-                  package-type: container
-                  delete-only-untagged-versions: "true"
+                  python-version: "3.14"
+
+            - name: Conservative GHCR cleanup (default dry-run)
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  OWNER: credona
+                  PACKAGE_NAME: age-decision-antispoof
+                  DRY_RUN: ${{ inputs.dry_run }}
+              run: python scripts/ghcr/safe_cleanup_untagged.py

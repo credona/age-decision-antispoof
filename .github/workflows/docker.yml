@@ -4,6 +4,12 @@ on:
     push:
         tags:
             - "v*.*.*"
+    workflow_dispatch:
+        inputs:
+            release_tag:
+                description: "Release tag to rebuild and publish (e.g. v1.2.3)"
+                required: true
+                type: string
 
 permissions:
     contents: read
@@ -16,6 +22,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.ref }}
 
             - name: Extract project metadata
               id: project
@@ -42,6 +50,7 @@ jobs:
                   images: ghcr.io/credona/age-decision-antispoof
                   tags: |
                       type=ref,event=tag
+                      type=raw,value=${{ inputs.release_tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
 
             - name: Log in to GitHub Container Registry
               uses: docker/login-action@v4
@@ -72,7 +81,7 @@ jobs:
             - name: Validate GHCR image tag after push
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  RELEASE_TAG: ${{ github.ref_name }}
+                  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.ref_name }}
               run: |
                   python - <<'PY'
                   import json
