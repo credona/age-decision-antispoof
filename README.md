@@ -43,6 +43,9 @@ Version 2.3.0 tightens public contract governance: stable status endpoint covera
 
 - Repository: https://github.com/credona/age-decision-antispoof
 - Usage: docs/usage.md
+- Deprecation policy: docs/deprecation-policy.md
+- Error model: docs/error-model.md
+- Status contract: docs/status-contract.md
 - Models and third-party notes: docs/models.md
 - Benchmarks: docs/benchmarks.md
 - Compatibility: docs/compatibility.md

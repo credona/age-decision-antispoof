@@ -12,6 +12,9 @@ Global project direction is tracked in the central Age Decision repository.
   <li>Normalized request validation errors to the same public ErrorResponse contract.</li>
   <li>Mapped missing multipart file validation failures to <code>missing_file</code> with HTTP 400 and <code>Invalid request.</code>.</li>
   <li>Preserved privacy-first forbidden field guarantees for anti-spoof public outputs.</li>
+  <li>Documented AntiSpoof public contract deprecation rules in <code>docs/deprecation-policy.md</code>.</li>
+  <li>Documented the AntiSpoof error model and codes in <code>docs/error-model.md</code>.</li>
+  <li>Documented stable status endpoints and <code>contract_version</code> behavior in <code>docs/status-contract.md</code>.</li>
 </ul>
 
 <hr>
