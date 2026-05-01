@@ -4,6 +4,21 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+<h2>2.3.0</h2>
+
+<ul>
+  <li>Added stable public status contract regression coverage for <code>/health</code> and <code>/model/status</code>.</li>
+  <li>Standardized the public error response model to expose only <code>request_id</code>, <code>correlation_id</code>, and <code>error</code>.</li>
+  <li>Normalized request validation errors to the same public ErrorResponse contract.</li>
+  <li>Mapped missing multipart file validation failures to <code>missing_file</code> with HTTP 400 and <code>Invalid request.</code>.</li>
+  <li>Preserved privacy-first forbidden field guarantees for anti-spoof public outputs.</li>
+  <li>Documented AntiSpoof public contract deprecation rules in <code>docs/deprecation-policy.md</code>.</li>
+  <li>Documented the AntiSpoof error model and codes in <code>docs/error-model.md</code>.</li>
+  <li>Documented stable status endpoints and <code>contract_version</code> behavior in <code>docs/status-contract.md</code>.</li>
+</ul>
+
+<hr>
+
 <h2>2.2.3</h2>
 
 <ul>

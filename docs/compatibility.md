@@ -60,8 +60,8 @@ Generated view:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.2.3",
-  "contract_version": "2.2",
+  "version": "2.3.0",
+  "contract_version": "2.3",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
 }
@@ -88,8 +88,8 @@ Generated view:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.2.3",
-  "contract_version": "2.2",
+  "version": "2.3.0",
+  "contract_version": "2.3",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
     "age-decision-js": ">=2.0.0 <3.0.0"
@@ -244,6 +244,13 @@ Compatibility is checked through:
 - Docker metadata checks
 - release tag checks
 - generated documentation checks
+
+Version 2.3.0 contract governance additionally verifies:
+
+- stable status contracts for `GET /health` and `GET /model/status`
+- standardized `ErrorResponse` shape for validation and processing errors
+- missing multipart file mapped to `missing_file` with HTTP 400
+- privacy-first forbidden public fields remain absent from `/check` outputs (including `confidence`, `spoof_score`, `threshold`, `details`, `cred_score`, `raw_score`, `model_score`, and `heuristic_scores`)
 
 Run all checks:
 

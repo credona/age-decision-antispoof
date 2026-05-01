@@ -2,7 +2,8 @@ import os
 
 import cv2
 import numpy as np
-from fastapi import FastAPI, File, Header, UploadFile
+from fastapi import FastAPI, File, Header, Request, UploadFile
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from antispoof import AntiSpoof
@@ -345,3 +346,42 @@ def _log_error(
         },
         level=level,
     )
+
+
+def _map_validation_error_code(errors: list[dict]) -> str:
+    for error in errors:
+        loc = error.get("loc", ())
+        error_type = error.get("type", "")
+
+        if "file" in loc and error_type in {"missing", "value_error.missing"}:
+            return "missing_file"
+
+    return "invalid_request"
+
+
+async def handle_request_validation_error(request: Request, exc: RequestValidationError):
+    context = build_request_context(
+        request_id=request.headers.get("x-request-id"),
+        correlation_id=request.headers.get("x-correlation-id"),
+    )
+    error_code = _map_validation_error_code(exc.errors())
+
+    _log_error(
+        event="antispoof_check_rejected",
+        request_id=context.request_id,
+        correlation_id=context.correlation_id,
+        error_type="validation_error",
+        error_code=error_code,
+        level="warning",
+    )
+
+    return _error_response(
+        status_code=400,
+        request_id=context.request_id,
+        correlation_id=context.correlation_id,
+        code=error_code,
+        message="Invalid request.",
+    )
+
+
+app.add_exception_handler(RequestValidationError, handle_request_validation_error)

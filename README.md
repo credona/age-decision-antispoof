@@ -22,6 +22,8 @@ It does not expose raw model scores, heuristic details, or internal calibration 
 
 It does not perform identity verification, face recognition, document verification, age estimation, or active liveness challenge.
 
+Version 2.3.0 tightens public contract governance: stable status endpoint coverage, standardized error responses, normalized request validation errors including <code>missing_file</code> for missing multipart uploads, and enforced privacy-first forbidden-field rules for anti-spoof outputs.
+
 <hr>
 
 <h2>When to use this repository</h2>
@@ -41,6 +43,9 @@ It does not perform identity verification, face recognition, document verificati
 
 - Repository: https://github.com/credona/age-decision-antispoof
 - Usage: docs/usage.md
+- Deprecation policy: docs/deprecation-policy.md
+- Error model: docs/error-model.md
+- Status contract: docs/status-contract.md
 - Models and third-party notes: docs/models.md
 - Benchmarks: docs/benchmarks.md
 - Compatibility: docs/compatibility.md
