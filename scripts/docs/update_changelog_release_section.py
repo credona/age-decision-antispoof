@@ -2,11 +2,20 @@
 
 from __future__ import annotations
 
-import re
+import sys
 from pathlib import Path
 
+_DOCS_SCRIPTS_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(_DOCS_SCRIPTS_DIR))
+
+from changelog_utils import (  # noqa: E402
+    build_changelog_block,
+    read_text,
+    replace_or_prepend_version_section,
+    write_text,
+)
+
 CHANGELOG_PATH = Path("CHANGELOG.md")
-ANCHOR = "Global project direction is tracked in the central Age Decision repository.\n\n"
 MANAGED_VERSION = "2.3.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
@@ -21,34 +30,14 @@ CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
 )
 
 
-def build_block() -> str:
-    lines = [
-        f"<h2>{MANAGED_VERSION}</h2>",
-        "",
-        "<ul>",
-    ]
-    for item in CHANGELOG_SECTION_ITEMS:
-        lines.append(f"  <li>{item}</li>")
-    lines.extend(["</ul>", "", "<hr>", "", ""])
-    return "\n".join(lines)
-
-
 def main() -> None:
-    heading = f"<h2>{MANAGED_VERSION}</h2>"
-    new_block = build_block()
-    text = CHANGELOG_PATH.read_text(encoding="utf-8")
-    pattern = re.compile(
-        re.escape(heading) + r"\s*\n\s*<ul>.*?</ul>\s*\n\s*<hr>\s*\n*",
-        re.DOTALL,
-    )
-    if pattern.search(text):
-        updated = pattern.sub(new_block, text, count=1)
-    elif ANCHOR in text:
-        updated = text.replace(ANCHOR, ANCHOR + new_block, 1)
-    else:
-        raise SystemExit("CHANGELOG.md missing expected anchor paragraph")
-
-    CHANGELOG_PATH.write_text(updated, encoding="utf-8")
+    block = build_changelog_block(MANAGED_VERSION, CHANGELOG_SECTION_ITEMS)
+    text = read_text(CHANGELOG_PATH)
+    try:
+        updated = replace_or_prepend_version_section(text, MANAGED_VERSION, block)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+    write_text(CHANGELOG_PATH, updated)
 
 
 if __name__ == "__main__":
