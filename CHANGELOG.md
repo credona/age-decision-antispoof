@@ -16,6 +16,20 @@ Global project direction is tracked in the central Age Decision repository.
 
 <hr>
 
+<h2>2.2.3</h2>
+
+<ul>
+  <li>Enforced documentation boundaries between global and repository-specific docs.</li>
+  <li>Removed cross-repository documentation duplication.</li>
+  <li>Normalized repository <code>README.md</code> scope.</li>
+  <li>Normalized <code>CONTRIBUTING.md</code> to local workflows.</li>
+  <li>Normalized <code>SECURITY.md</code> and <code>COMPATIBILITY.md</code> scope.</li>
+  <li>Enforced absolute GitHub links only for cross-repository documentation references.</li>
+  <li>Centralized global documentation in <code>age-decision</code>.</li>
+</ul>
+
+<hr>
+
 <h2>2.2.2</h2>
 
 <ul>
