@@ -1,11 +1,10 @@
 import os
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import onnxruntime as ort
 
 from antispoof.exceptions import ModelNotFoundError
-
 
 DEFAULT_MODEL_PATH = "antispoof/models/MiniFASNetV2.onnx"
 
@@ -21,7 +20,7 @@ class AntiSpoofModelLoader:
         """Return whether the configured model file exists."""
         return self.model_path.exists()
 
-    def status(self) -> Dict[str, Any]:
+    def status(self) -> dict[str, Any]:
         """Return model metadata without loading the model again."""
         return {
             "type": "onnx",

@@ -1,4 +1,4 @@
-from antispoof.privacy import build_privacy_metadata
+from antispoof.domain.privacy import build_privacy_metadata
 
 
 def test_build_privacy_metadata():

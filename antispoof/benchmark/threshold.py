@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from antispoof.metrics import AntiSpoofMetrics, compute_error_rates
+from antispoof.domain.metrics import AntiSpoofMetrics, compute_error_rates
 
 
 @dataclass(frozen=True)

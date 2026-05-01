@@ -1,4 +1,4 @@
-from antispoof.metrics import compute_error_rates
+from antispoof.domain.metrics import compute_error_rates
 
 
 def test_compute_error_rates():

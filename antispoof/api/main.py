@@ -1,20 +1,21 @@
 import os
 
-import cv2
-import numpy as np
 from fastapi import FastAPI, File, Header, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from antispoof import AntiSpoof
+from antispoof.api.response_filter import filter_check_response
 from antispoof.api.schemas import ErrorResponse
+from antispoof.application.dto.check_command import CheckCommand
+from antispoof.application.use_cases.check_liveness import CheckLivenessUseCase
 from antispoof.benchmark import run_local_benchmark
 from antispoof.core import build_request_context
+from antispoof.domain.privacy import build_privacy_metadata
 from antispoof.exceptions import AntiSpoofError
-from antispoof.models.loader import AntiSpoofModelLoader
-from antispoof.privacy import build_privacy_metadata
+from antispoof.infrastructure.logging.safe_logger import log_event
+from antispoof.infrastructure.models.loader import AntiSpoofModelLoader
 from antispoof.project import project_metadata
-from antispoof.utils.logger import log_event
 
 THRESHOLD = float(os.getenv("ANTISPOOF_THRESHOLD", "0.5"))
 
@@ -44,6 +45,7 @@ pipeline = AntiSpoof(
     texture_weight=TEXTURE_WEIGHT,
     screen_weight=SCREEN_WEIGHT,
 )
+check_liveness_use_case = CheckLivenessUseCase(pipeline)
 
 
 @app.get("/health")
@@ -202,17 +204,13 @@ async def check(
                 code="empty_file",
             )
 
-        np_arr = np.frombuffer(contents, np.uint8)
-        image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-
-        if image is None:
-            return _rejected_check_response(
+        result = check_liveness_use_case.execute(
+            CheckCommand(
+                image_bytes=contents,
                 request_id=context.request_id,
                 correlation_id=context.correlation_id,
-                code="invalid_image",
             )
-
-        result = pipeline.predict(image)
+        )
 
         response = {
             "request_id": context.request_id,
@@ -246,7 +244,25 @@ async def check(
             },
         )
 
-        return response
+        return filter_check_response(response)
+
+    except ValueError:
+        _log_error(
+            event="antispoof_check_rejected",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="validation_error",
+            error_code="invalid_image",
+            level="warning",
+        )
+
+        return _error_response(
+            status_code=400,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="invalid_image",
+            message="Invalid request.",
+        )
 
     except AntiSpoofError:
         _log_error(

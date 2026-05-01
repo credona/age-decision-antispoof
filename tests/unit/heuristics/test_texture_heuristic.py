@@ -1,6 +1,6 @@
 import numpy as np
 
-from antispoof.heuristics import TextureHeuristicAnalyzer, TextureHeuristicResult
+from antispoof.domain.heuristics import TextureHeuristicAnalyzer, TextureHeuristicResult
 
 
 def test_texture_heuristic_returns_expected_structure():

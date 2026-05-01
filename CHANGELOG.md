@@ -4,6 +4,17 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+<h2>2.4.0</h2>
+
+<ul>
+  <li>Started the v2.4.0 internal pipeline architecture refactoring cycle.</li>
+  <li>Prepared AntiSpoof for application, domain and infrastructure separation.</li>
+  <li>Preserved the existing public API contract with no response field changes.</li>
+  <li>Kept Docker and CI validation as the release gate for structural changes.</li>
+</ul>
+
+<hr>
+
 <h2>2.3.0</h2>
 
 <ul>

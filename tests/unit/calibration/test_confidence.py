@@ -1,4 +1,4 @@
-from antispoof.calibration import (
+from antispoof.domain.calibration import (
     calibrate_antispoof_confidence,
     compute_cred_antispoof_score,
 )

@@ -2,20 +2,20 @@ from pathlib import Path
 
 import numpy as np
 
-from antispoof.calibration import (
+from antispoof.domain.calibration import (
     calibrate_antispoof_confidence,
     compute_cred_antispoof_score,
 )
-from antispoof.exceptions import NoFaceDetectedError
-from antispoof.heuristics import (
+from antispoof.domain.heuristics import (
     BlurHeuristicAnalyzer,
     ScreenPatternHeuristicAnalyzer,
     TextureHeuristicAnalyzer,
 )
-from antispoof.models.loader import AntiSpoofModelLoader
-from antispoof.preprocessing.face_crop import resize_face_crop
-from antispoof.result import AntiSpoofResult
-from antispoof.utils.image import read_image
+from antispoof.domain.result.antispoof_result import AntiSpoofResult
+from antispoof.exceptions import NoFaceDetectedError
+from antispoof.infrastructure.models.loader import AntiSpoofModelLoader
+from antispoof.infrastructure.preprocessing.face_crop import resize_face_crop
+from antispoof.infrastructure.preprocessing.image import read_image, read_image_from_bytes
 
 
 class AntiSpoofPipeline:
@@ -147,6 +147,11 @@ class AntiSpoofPipeline:
             },
         )
 
+    def predict_from_bytes(self, image_bytes: bytes) -> AntiSpoofResult:
+        """Run anti-spoofing inference from encoded image bytes."""
+        image = read_image_from_bytes(image_bytes)
+        return self.predict(image)
+
     def predict_from_path(self, image_path: str | Path) -> AntiSpoofResult:
         """Run anti-spoofing inference from an image file path."""
         image = read_image(image_path)
@@ -154,7 +159,7 @@ class AntiSpoofPipeline:
 
     def predict_from_full_image(self, image: np.ndarray) -> AntiSpoofResult:
         """Detect a face from a full image and run anti-spoofing inference."""
-        from antispoof.integrations.age_decision_core import (
+        from antispoof.infrastructure.integrations.age_decision_core import (
             AgeDecisionCoreFaceDetector,
         )
 
