@@ -41,8 +41,8 @@ Expected health response:
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "2.2.3",
-  "contract_version": "2.2"
+  "version": "2.3.0",
+  "contract_version": "2.3"
 }
 ```
 <!-- END:HEALTH_RESPONSE -->
@@ -54,8 +54,8 @@ Expected version response:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.2.3",
-  "contract_version": "2.2",
+  "version": "2.3.0",
+  "contract_version": "2.3",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
 }
@@ -142,6 +142,8 @@ The public `/check` response does not expose:
 
 Error responses follow a stable JSON format.
 
+Request validation failures use the same shape and do not echo internal validation details.
+
 The API does not expose internal exception details.
 
 ```json
@@ -158,6 +160,7 @@ The API does not expose internal exception details.
 Known error codes:
 
 ```text
+missing_file
 empty_file
 invalid_image
 antispoof_processing_error
@@ -205,8 +208,8 @@ Run validation only:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.2.3",
-  "contract_version": "2.2",
+  "version": "2.3.0",
+  "contract_version": "2.3",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
     "age-decision-js": ">=2.0.0 <3.0.0"

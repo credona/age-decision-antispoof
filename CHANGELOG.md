@@ -4,16 +4,14 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
-<h2>2.2.3</h2>
+<h2>2.3.0</h2>
 
 <ul>
-  <li>Enforced documentation boundaries between global and repository-specific docs.</li>
-  <li>Removed cross-repository documentation duplication.</li>
-  <li>Normalized repository <code>README.md</code> scope.</li>
-  <li>Normalized <code>CONTRIBUTING.md</code> to local workflows.</li>
-  <li>Normalized <code>SECURITY.md</code> and <code>COMPATIBILITY.md</code> scope.</li>
-  <li>Enforced absolute GitHub links only for cross-repository documentation references.</li>
-  <li>Centralized global documentation in <code>age-decision</code>.</li>
+  <li>Added stable public status contract regression coverage for <code>/health</code> and <code>/model/status</code>.</li>
+  <li>Standardized the public error response model to expose only <code>request_id</code>, <code>correlation_id</code>, and <code>error</code>.</li>
+  <li>Normalized request validation errors to the same public ErrorResponse contract.</li>
+  <li>Mapped missing multipart file validation failures to <code>missing_file</code> with HTTP 400 and <code>Invalid request.</code>.</li>
+  <li>Preserved privacy-first forbidden field guarantees for anti-spoof public outputs.</li>
 </ul>
 
 <hr>

@@ -22,6 +22,8 @@ It does not expose raw model scores, heuristic details, or internal calibration 
 
 It does not perform identity verification, face recognition, document verification, age estimation, or active liveness challenge.
 
+Version 2.3.0 tightens public contract governance: stable status endpoint coverage, standardized error responses, normalized request validation errors including <code>missing_file</code> for missing multipart uploads, and enforced privacy-first forbidden-field rules for anti-spoof outputs.
+
 <hr>
 
 <h2>When to use this repository</h2>

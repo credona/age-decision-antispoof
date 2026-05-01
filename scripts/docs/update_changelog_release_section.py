@@ -1,4 +1,4 @@
-"""Deterministically maintain the v2.2.3 release section in CHANGELOG.md."""
+"""Deterministically maintain the v2.3.0 release section in CHANGELOG.md."""
 
 from __future__ import annotations
 
@@ -7,16 +7,17 @@ from pathlib import Path
 
 CHANGELOG_PATH = Path("CHANGELOG.md")
 ANCHOR = "Global project direction is tracked in the central Age Decision repository.\n\n"
-MANAGED_VERSION = "2.2.3"
+MANAGED_VERSION = "2.3.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
-    "Enforced documentation boundaries between global and repository-specific docs.",
-    "Removed cross-repository documentation duplication.",
-    "Normalized repository <code>README.md</code> scope.",
-    "Normalized <code>CONTRIBUTING.md</code> to local workflows.",
-    "Normalized <code>SECURITY.md</code> and <code>COMPATIBILITY.md</code> scope.",
-    "Enforced absolute GitHub links only for cross-repository documentation references.",
-    "Centralized global documentation in <code>age-decision</code>.",
+    "Added stable public status contract regression coverage for "
+    "<code>/health</code> and <code>/model/status</code>.",
+    "Standardized the public error response model to expose only "
+    "<code>request_id</code>, <code>correlation_id</code>, and <code>error</code>.",
+    "Normalized request validation errors to the same public ErrorResponse contract.",
+    "Mapped missing multipart file validation failures to <code>missing_file</code> "
+    "with HTTP 400 and <code>Invalid request.</code>.",
+    "Preserved privacy-first forbidden field guarantees for anti-spoof public outputs.",
 )
 
 
