@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 import pytest
+
 from antispoof.domain.privacy.safe_logging import (
     assert_privacy_safe_log_text,
     sanitize_log_payload,
