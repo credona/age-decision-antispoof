@@ -58,7 +58,6 @@ run_spoof_check_use_case = RunSpoofCheckUseCase(pipeline)
 
 @app.get("/health")
 def health():
-    """Return service health status."""
     return {
         "status": STATUS_OK,
         "service": project_metadata.service_name,
@@ -69,13 +68,11 @@ def health():
 
 @app.get("/version")
 def version():
-    """Return service version metadata."""
     return project_metadata.model_dump()
 
 
 @app.get("/engine/status")
 def engine_status():
-    """Return spoof check engine status."""
     model_metadata = model_loader.status()
 
     return {
@@ -84,15 +81,9 @@ def engine_status():
         "contract_version": project_metadata.contract_version,
         "antispoof_model": {
             **model_metadata,
-            "loaded": True,
+            "loaded": model_metadata["exists"],
         },
         "heuristics": HEURISTICS,
-        "threshold": THRESHOLD,
-        "weights": {
-            "model": MODEL_WEIGHT,
-            "texture": TEXTURE_WEIGHT,
-            "screen": SCREEN_WEIGHT,
-        },
     }
 
 
@@ -107,7 +98,6 @@ def benchmark(
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
 ):
-    """Run local benchmark evaluation and expose PAD metrics."""
     context = build_request_context(
         request_id=x_request_id,
         correlation_id=x_correlation_id,
@@ -128,16 +118,6 @@ def benchmark(
             {
                 "request_id": context.request_id,
                 "correlation_id": context.correlation_id,
-                "provider": PROVIDER,
-                "sample_count": response["dataset"]["sample_count"],
-                "current_threshold": response["current_threshold"],
-                "recommended_threshold": response["threshold_tuning"]["recommended_threshold"],
-                "apcer": response["metrics"]["apcer"],
-                "bpcer": response["metrics"]["bpcer"],
-                "acer": response["metrics"]["acer"],
-                "tuned_apcer": response["threshold_tuning"]["metrics"]["apcer"],
-                "tuned_bpcer": response["threshold_tuning"]["metrics"]["bpcer"],
-                "tuned_acer": response["threshold_tuning"]["metrics"]["acer"],
             },
         )
 
@@ -193,11 +173,6 @@ async def check(
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
 ):
-    """Run anti-spoofing verification on an uploaded image.
-
-    The image is processed in memory only and is never persisted.
-    Internal model scores and heuristic details are not exposed publicly.
-    """
     context = build_request_context(
         request_id=x_request_id,
         correlation_id=x_correlation_id,
@@ -246,12 +221,6 @@ async def check(
                 "request_id": context.request_id,
                 "correlation_id": context.correlation_id,
                 "decision": response["decision"],
-                "is_real": response["is_real"],
-                "spoof_detected": response["spoof_detected"],
-                "cred_antispoof_score": response["cred_antispoof_score"],
-                "provider": response["provider"],
-                "image_persisted": response["privacy"]["image_persisted"],
-                "raw_image_logged": response["privacy"]["raw_image_logged"],
             },
         )
 

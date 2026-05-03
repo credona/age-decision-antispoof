@@ -1,41 +1,42 @@
-import os
 from pathlib import Path
 from typing import Any
 
 import onnxruntime as ort
 
-from antispoof.domain.constants import MODEL_NAME_MINIFASNET, MODEL_TYPE_ONNX
+from antispoof.domain.models.metadata import ModelMetadata
 from antispoof.exceptions import ModelNotFoundError
-
-DEFAULT_MODEL_PATH = "antispoof/models/MiniFASNetV2.onnx"
+from antispoof.infrastructure.models.registry import (
+    DEFAULT_ANTISPOOF_MODEL_ID,
+    build_default_model_registry,
+)
 
 
 class AntiSpoofModelLoader:
-    """Loads the ONNX anti-spoofing model."""
+    """Loads the configured anti-spoofing ONNX model."""
 
-    def __init__(self, model_path: str | Path | None = None):
-        resolved_path = model_path or os.getenv("ANTISPOOF_MODEL_PATH", DEFAULT_MODEL_PATH)
-        self.model_path = Path(resolved_path)
+    def __init__(self, model: ModelMetadata | None = None):
+        self.registry = build_default_model_registry()
+        self.model = model or self.registry.get(DEFAULT_ANTISPOOF_MODEL_ID)
+        self.model_path = Path(self.model.path)
 
     def exists(self) -> bool:
-        """Return whether the configured model file exists."""
         return self.model_path.exists()
 
     def status(self) -> dict[str, Any]:
-        """Return model metadata without loading the model again."""
         return {
-            "type": MODEL_TYPE_ONNX,
-            "name": MODEL_NAME_MINIFASNET,
-            "path": str(self.model_path),
+            "model_id": self.model.model_id,
+            "model_version": self.model.model_version,
+            "task": self.model.task,
+            "runtime": self.model.runtime,
+            "scoring_policy_id": self.model.scoring_policy_id,
             "exists": self.exists(),
         }
 
     def load(self) -> ort.InferenceSession:
-        """Load the ONNX model and return an inference session."""
         if not self.exists():
             raise ModelNotFoundError(
-                f"Model not found at {self.model_path}. "
-                "Run scripts/download_models.py before inference."
+                "Configured anti-spoof model was not found. "
+                "Run scripts/models/download_models.py before inference."
             )
 
         return ort.InferenceSession(

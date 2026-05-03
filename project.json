@@ -1,8 +1,8 @@
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.4.0",
-  "contract_version": "2.4",
+  "version": "2.5.0",
+  "contract_version": "2.5",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof",
   "license": "Apache-2.0",
@@ -21,21 +21,14 @@
     }
   },
   "runtime": {
-    "dev": {
+    "common": {
       "ANTISPOOF_PORT": "8001",
-      "MODEL_PATH": "models/MiniFASNetV2.onnx",
+      "ANTISPOOF_MODEL_ID": "credona.antispoof.minifasnet-v2.v1",
       "USE_MOCK_MODEL": "false",
-      "SPOOF_THRESHOLD": "0.7",
       "LOG_LEVEL": "INFO",
       "LOG_FORMAT": "json"
     },
-    "prod": {
-      "ANTISPOOF_PORT": "8001",
-      "MODEL_PATH": "models/MiniFASNetV2.onnx",
-      "USE_MOCK_MODEL": "false",
-      "SPOOF_THRESHOLD": "0.7",
-      "LOG_LEVEL": "INFO",
-      "LOG_FORMAT": "json"
-    }
+    "dev": {},
+    "prod": {}
   }
 }
