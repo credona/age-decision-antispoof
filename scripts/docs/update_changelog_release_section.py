@@ -20,6 +20,9 @@ MANAGED_VERSION = "2.4.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
     "Introduced pipeline-oriented application, domain, and infrastructure boundaries.",
+    "Added privacy-safe logging tests covering image, base64, raw payload, "
+    "internal scores, thresholds, and downstream data leakage.",
+    "Added deterministic rejection for unsupported v3 input types: image_sequence and video.",
     "Renamed liveness use case and pipeline port to neutral spoof check terminology.",
     "Renamed public status metadata from model info to engine info.",
     "Renamed internal confidence terminology to signal quality.",

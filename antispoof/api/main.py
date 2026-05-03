@@ -1,10 +1,11 @@
 import os
 
-from fastapi import FastAPI, File, Header, Request, UploadFile
+from fastapi import FastAPI, File, Header, Query, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from antispoof import AntiSpoof
+from antispoof.api.input_validator import UnsupportedInputTypeError, validate_input_type
 from antispoof.api.response_filter import filter_check_response
 from antispoof.api.schemas import ErrorResponse
 from antispoof.application.dto.check_command import CheckCommand
@@ -188,6 +189,7 @@ def benchmark(
 )
 async def check(
     file: UploadFile = File(...),
+    input_type: str = Query(default="image"),
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
 ):
@@ -202,6 +204,8 @@ async def check(
     )
 
     try:
+        validate_input_type(input_type)
+
         contents = await file.read()
 
         if not contents:
@@ -252,6 +256,24 @@ async def check(
         )
 
         return filter_check_response(response)
+
+    except UnsupportedInputTypeError as exc:
+        _log_error(
+            event="antispoof_check_rejected",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="validation_error",
+            error_code="UNSUPPORTED_INPUT_TYPE",
+            level=LOG_LEVEL_WARNING,
+        )
+
+        return _error_response(
+            status_code=400,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="UNSUPPORTED_INPUT_TYPE",
+            message=str(exc),
+        )
 
     except ValueError:
         _log_error(

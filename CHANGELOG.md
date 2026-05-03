@@ -8,6 +8,8 @@ Global project direction is tracked in the central Age Decision repository.
 
 <ul>
   <li>Introduced pipeline-oriented application, domain, and infrastructure boundaries.</li>
+  <li>Added privacy-safe logging tests covering image, base64, raw payload, internal scores, thresholds, and downstream data leakage.</li>
+  <li>Added deterministic rejection for unsupported v3 input types: image_sequence and video.</li>
   <li>Renamed liveness use case and pipeline port to neutral spoof check terminology.</li>
   <li>Renamed public status metadata from model info to engine info.</li>
   <li>Renamed internal confidence terminology to signal quality.</li>
