@@ -2,20 +2,21 @@ from pathlib import Path
 
 import numpy as np
 
-from antispoof.calibration import (
-    calibrate_antispoof_confidence,
+from antispoof.domain.calibration import (
+    calibrate_signal_quality,
     compute_cred_antispoof_score,
 )
-from antispoof.exceptions import NoFaceDetectedError
-from antispoof.heuristics import (
+from antispoof.domain.constants import DECISION_REAL, DECISION_SPOOF
+from antispoof.domain.heuristics import (
     BlurHeuristicAnalyzer,
     ScreenPatternHeuristicAnalyzer,
     TextureHeuristicAnalyzer,
 )
-from antispoof.models.loader import AntiSpoofModelLoader
-from antispoof.preprocessing.face_crop import resize_face_crop
-from antispoof.result import AntiSpoofResult
-from antispoof.utils.image import read_image
+from antispoof.domain.result.antispoof_result import AntiSpoofResult
+from antispoof.exceptions import NoFaceDetectedError
+from antispoof.infrastructure.models.loader import AntiSpoofModelLoader
+from antispoof.infrastructure.preprocessing.face_crop import resize_face_crop
+from antispoof.infrastructure.preprocessing.image import read_image, read_image_from_bytes
 
 
 class AntiSpoofPipeline:
@@ -105,16 +106,16 @@ class AntiSpoofPipeline:
             + self.screen_weight * (1.0 - screen_score)
         )
 
-        final_score = calibrate_antispoof_confidence(raw_final_score)
+        final_score = calibrate_signal_quality(raw_final_score)
         cred_antispoof_score = compute_cred_antispoof_score(final_score)
 
         is_real = final_score >= self.threshold
 
         return AntiSpoofResult(
             is_real=is_real,
-            confidence=final_score,
+            signal_quality=final_score,
             threshold=self.threshold,
-            label="real" if is_real else "spoof",
+            label=DECISION_REAL if is_real else DECISION_SPOOF,
             model_score=model_real_score,
             spoof_score=spoof_score,
             texture_score=texture_score,
@@ -147,6 +148,11 @@ class AntiSpoofPipeline:
             },
         )
 
+    def predict_from_bytes(self, image_bytes: bytes) -> AntiSpoofResult:
+        """Run anti-spoofing inference from encoded image bytes."""
+        image = read_image_from_bytes(image_bytes)
+        return self.predict(image)
+
     def predict_from_path(self, image_path: str | Path) -> AntiSpoofResult:
         """Run anti-spoofing inference from an image file path."""
         image = read_image(image_path)
@@ -154,7 +160,7 @@ class AntiSpoofPipeline:
 
     def predict_from_full_image(self, image: np.ndarray) -> AntiSpoofResult:
         """Detect a face from a full image and run anti-spoofing inference."""
-        from antispoof.integrations.age_decision_core import (
+        from antispoof.infrastructure.integrations.age_decision_core import (
             AgeDecisionCoreFaceDetector,
         )
 

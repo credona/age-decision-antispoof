@@ -7,12 +7,12 @@ class AntiSpoofResult:
     """Represents the result of an anti-spoofing inference.
 
     This object combines model prediction, heuristic analysis,
-    calibrated confidence, and Credona trust scoring into a single,
+    calibrated signal_quality, and Credona trust scoring into a single,
     immutable structure.
     """
 
     is_real: bool
-    confidence: float
+    signal_quality: float
     threshold: float
     label: str
 
@@ -30,7 +30,7 @@ class AntiSpoofResult:
         """Convert the result to a serializable dictionary."""
         return {
             "is_real": self.is_real,
-            "confidence": self.confidence,
+            "signal_quality": self.signal_quality,
             "threshold": self.threshold,
             "label": self.label,
             "model_score": self.model_score,

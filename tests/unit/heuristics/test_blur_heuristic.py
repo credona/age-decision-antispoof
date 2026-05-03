@@ -1,6 +1,6 @@
 import numpy as np
 
-from antispoof.heuristics import BlurHeuristicAnalyzer, BlurHeuristicResult
+from antispoof.domain.heuristics import BlurHeuristicAnalyzer, BlurHeuristicResult
 
 
 def test_blur_heuristic_returns_expected_structure():

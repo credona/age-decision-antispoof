@@ -4,7 +4,7 @@ from typing import Any
 from antispoof import AntiSpoof
 from antispoof.benchmark.dataset import load_benchmark_labels
 from antispoof.benchmark.threshold import tune_threshold
-from antispoof.metrics import compute_error_rates
+from antispoof.domain.metrics import compute_error_rates
 
 
 def run_local_benchmark(

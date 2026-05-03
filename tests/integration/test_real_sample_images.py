@@ -4,7 +4,7 @@ import pytest
 
 from antispoof import AntiSpoof
 from antispoof.benchmark import load_benchmark_labels
-from antispoof.metrics import compute_error_rates
+from antispoof.domain.metrics import compute_error_rates
 
 DATASET_DIR = Path("benchmarks/datasets/celeba_spoof")
 LABELS_CSV = DATASET_DIR / "labels.csv"

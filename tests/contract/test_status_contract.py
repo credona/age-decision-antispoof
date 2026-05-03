@@ -31,7 +31,7 @@ def test_health_contract_is_stable_and_privacy_first():
 
 
 def test_model_status_contract_is_stable():
-    response = client.get("/model/status")
+    response = client.get("/engine/status")
 
     assert response.status_code == 200
 

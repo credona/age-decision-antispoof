@@ -1,14 +1,14 @@
-"""Deterministically maintain the v2.3.0 release section in CHANGELOG.md."""
+"""Deterministically maintain the v2.4.0 release section in CHANGELOG.md."""
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 
-_DOCS_SCRIPTS_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(_DOCS_SCRIPTS_DIR))
+_SCRIPTS_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(_SCRIPTS_DIR))
 
-from changelog_utils import (  # noqa: E402
+from lib.changelog import (  # noqa: E402
     build_changelog_block,
     read_text,
     replace_or_prepend_version_section,
@@ -16,22 +16,20 @@ from changelog_utils import (  # noqa: E402
 )
 
 CHANGELOG_PATH = Path("CHANGELOG.md")
-MANAGED_VERSION = "2.3.0"
+MANAGED_VERSION = "2.4.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
-    "Added stable public status contract regression coverage for "
-    "<code>/health</code> and <code>/model/status</code>.",
-    "Standardized the public error response model to expose only "
-    "<code>request_id</code>, <code>correlation_id</code>, and <code>error</code>.",
-    "Normalized request validation errors to the same public ErrorResponse contract.",
-    "Mapped missing multipart file validation failures to <code>missing_file</code> "
-    "with HTTP 400 and <code>Invalid request.</code>.",
-    "Preserved privacy-first forbidden field guarantees for anti-spoof public outputs.",
-    "Documented AntiSpoof public contract deprecation rules in "
-    "<code>docs/deprecation-policy.md</code>.",
-    "Documented the AntiSpoof error model and codes in <code>docs/error-model.md</code>.",
-    "Documented stable status endpoints and <code>contract_version</code> behavior in "
-    "<code>docs/status-contract.md</code>.",
+    "Introduced pipeline-oriented application, domain, and infrastructure boundaries.",
+    "Added privacy-safe logging tests covering image, base64, raw payload, "
+    "internal scores, thresholds, and downstream data leakage.",
+    "Added deterministic rejection for unsupported v3 input types: image_sequence and video.",
+    "Renamed liveness use case and pipeline port to neutral spoof check terminology.",
+    "Renamed public status metadata from model info to engine info.",
+    "Renamed internal confidence terminology to signal quality.",
+    "Centralized public decisions, model metadata, privacy metadata, and log levels as constants.",
+    "Updated documentation from model status terminology to engine status terminology.",
+    "Preserved the existing public API contract and privacy-first forbidden field checks.",
+    "Validated the refactor through Docker CI-equivalent checks.",
 )
 
 

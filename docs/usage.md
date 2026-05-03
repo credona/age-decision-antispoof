@@ -31,7 +31,7 @@ docker compose --env-file .generated/compose/dev.env -f docker-compose.dev.yml d
 ```bash
 curl -i http://localhost:8001/health
 curl -i http://localhost:8001/version
-curl -i http://localhost:8001/model/status
+curl -i http://localhost:8001/engine/status
 ```
 
 Expected health response:
@@ -41,8 +41,8 @@ Expected health response:
 {
   "status": "ok",
   "service": "age-decision-antispoof",
-  "version": "2.3.0",
-  "contract_version": "2.3"
+  "version": "2.4.0",
+  "contract_version": "2.4"
 }
 ```
 <!-- END:HEALTH_RESPONSE -->
@@ -54,8 +54,8 @@ Expected version response:
 {
   "service_name": "age-decision-antispoof",
   "app_name": "Age Decision AntiSpoof",
-  "version": "2.3.0",
-  "contract_version": "2.3",
+  "version": "2.4.0",
+  "contract_version": "2.4",
   "repository": "https://github.com/credona/age-decision-antispoof",
   "image": "ghcr.io/credona/age-decision-antispoof"
 }
@@ -208,8 +208,8 @@ Run validation only:
 ```json
 {
   "service": "age-decision-antispoof",
-  "version": "2.3.0",
-  "contract_version": "2.3",
+  "version": "2.4.0",
+  "contract_version": "2.4",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
     "age-decision-js": ">=2.0.0 <3.0.0"

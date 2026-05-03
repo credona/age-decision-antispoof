@@ -1,6 +1,6 @@
 import numpy as np
 
-from antispoof.heuristics import (
+from antispoof.domain.heuristics import (
     ScreenPatternHeuristicAnalyzer,
     ScreenPatternHeuristicResult,
 )

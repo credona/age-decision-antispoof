@@ -1,3 +1,4 @@
+from antispoof.domain.result.antispoof_result import AntiSpoofResult
 from antispoof.exceptions import (
     AntiSpoofError,
     FaceDetectionUnavailableError,
@@ -5,7 +6,6 @@ from antispoof.exceptions import (
     NoFaceDetectedError,
 )
 from antispoof.pipeline import AntiSpoofPipeline
-from antispoof.result import AntiSpoofResult
 
 AntiSpoof = AntiSpoofPipeline
 

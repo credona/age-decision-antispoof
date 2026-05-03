@@ -28,7 +28,7 @@ Emits serialized <code>ProjectMetadata</code>:
 
 <hr>
 
-<h2>GET /model/status</h2>
+<h2>GET /engine/status</h2>
 
 Top-level envelope per contract assertions:
 

@@ -13,14 +13,14 @@ def test_pipeline_predict_returns_expected_structure():
     assert isinstance(result, AntiSpoofResult)
 
     assert isinstance(result.is_real, bool)
-    assert isinstance(result.confidence, float)
+    assert isinstance(result.signal_quality, float)
     assert isinstance(result.model_score, float)
     assert isinstance(result.spoof_score, float)
     assert isinstance(result.texture_score, float)
     assert isinstance(result.final_score, float)
     assert isinstance(result.cred_antispoof_score, float)
 
-    assert 0.0 <= result.confidence <= 1.0
+    assert 0.0 <= result.signal_quality <= 1.0
     assert 0.0 <= result.spoof_score <= 1.0
     assert 0.0 <= result.cred_antispoof_score <= 1.0
 

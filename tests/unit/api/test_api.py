@@ -39,7 +39,7 @@ def test_health():
 
 def test_model_status():
     """Test model status endpoint."""
-    response = client.get("/model/status")
+    response = client.get("/engine/status")
     payload = response.json()
 
     assert response.status_code == 200
@@ -83,7 +83,7 @@ def test_check_with_generated_image():
     assert "decision" in payload
     assert "cred_antispoof_score" in payload
     assert 0.0 <= payload["cred_antispoof_score"] <= 1.0
-    assert "model_info" in payload
+    assert "engine_info" in payload
     assert "privacy" in payload
 
     assert "confidence" not in payload

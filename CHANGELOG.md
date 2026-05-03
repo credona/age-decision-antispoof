@@ -4,6 +4,23 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+<h2>2.4.0</h2>
+
+<ul>
+  <li>Introduced pipeline-oriented application, domain, and infrastructure boundaries.</li>
+  <li>Added privacy-safe logging tests covering image, base64, raw payload, internal scores, thresholds, and downstream data leakage.</li>
+  <li>Added deterministic rejection for unsupported v3 input types: image_sequence and video.</li>
+  <li>Renamed liveness use case and pipeline port to neutral spoof check terminology.</li>
+  <li>Renamed public status metadata from model info to engine info.</li>
+  <li>Renamed internal confidence terminology to signal quality.</li>
+  <li>Centralized public decisions, model metadata, privacy metadata, and log levels as constants.</li>
+  <li>Updated documentation from model status terminology to engine status terminology.</li>
+  <li>Preserved the existing public API contract and privacy-first forbidden field checks.</li>
+  <li>Validated the refactor through Docker CI-equivalent checks.</li>
+</ul>
+
+<hr>
+
 <h2>2.3.0</h2>
 
 <ul>

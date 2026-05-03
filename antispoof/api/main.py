@@ -1,20 +1,29 @@
 import os
 
-import cv2
-import numpy as np
-from fastapi import FastAPI, File, Header, Request, UploadFile
+from fastapi import FastAPI, File, Header, Query, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from antispoof import AntiSpoof
+from antispoof.api.input_validator import UnsupportedInputTypeError, validate_input_type
+from antispoof.api.response_filter import filter_check_response
 from antispoof.api.schemas import ErrorResponse
+from antispoof.application.dto.check_command import CheckCommand
+from antispoof.application.use_cases.run_spoof_check import RunSpoofCheckUseCase
 from antispoof.benchmark import run_local_benchmark
 from antispoof.core import build_request_context
+from antispoof.domain.constants import (
+    LOG_LEVEL_ERROR,
+    LOG_LEVEL_WARNING,
+    MODEL_NAME_MINIFASNET,
+    MODEL_TYPE_ONNX,
+    STATUS_OK,
+)
+from antispoof.domain.privacy import build_privacy_metadata
 from antispoof.exceptions import AntiSpoofError
-from antispoof.models.loader import AntiSpoofModelLoader
-from antispoof.privacy import build_privacy_metadata
+from antispoof.infrastructure.logging.safe_logger import log_event
+from antispoof.infrastructure.models.loader import AntiSpoofModelLoader
 from antispoof.project import project_metadata
-from antispoof.utils.logger import log_event
 
 THRESHOLD = float(os.getenv("ANTISPOOF_THRESHOLD", "0.5"))
 
@@ -23,8 +32,8 @@ TEXTURE_WEIGHT = float(os.getenv("TEXTURE_WEIGHT", "0.15"))
 SCREEN_WEIGHT = float(os.getenv("SCREEN_WEIGHT", "0.15"))
 
 PROVIDER = project_metadata.service_name
-MODEL_NAME = "MiniFASNetV2"
-MODEL_TYPE = "onnx"
+MODEL_NAME = MODEL_NAME_MINIFASNET
+MODEL_TYPE = MODEL_TYPE_ONNX
 HEURISTICS = [
     "texture",
     "screen_pattern",
@@ -44,13 +53,14 @@ pipeline = AntiSpoof(
     texture_weight=TEXTURE_WEIGHT,
     screen_weight=SCREEN_WEIGHT,
 )
+run_spoof_check_use_case = RunSpoofCheckUseCase(pipeline)
 
 
 @app.get("/health")
 def health():
     """Return service health status."""
     return {
-        "status": "ok",
+        "status": STATUS_OK,
         "service": project_metadata.service_name,
         "version": project_metadata.version,
         "contract_version": project_metadata.contract_version,
@@ -63,9 +73,9 @@ def version():
     return project_metadata.model_dump()
 
 
-@app.get("/model/status")
-def model_status():
-    """Return anti-spoofing model and heuristic status."""
+@app.get("/engine/status")
+def engine_status():
+    """Return spoof check engine status."""
     model_metadata = model_loader.status()
 
     return {
@@ -140,7 +150,7 @@ def benchmark(
             correlation_id=context.correlation_id,
             error_type="dataset_error",
             error_code="benchmark_dataset_unavailable",
-            level="warning",
+            level=LOG_LEVEL_WARNING,
         )
 
         return _error_response(
@@ -158,7 +168,7 @@ def benchmark(
             correlation_id=context.correlation_id,
             error_type="runtime_error",
             error_code="benchmark_runtime_error",
-            level="error",
+            level=LOG_LEVEL_ERROR,
         )
 
         return _error_response(
@@ -179,6 +189,7 @@ def benchmark(
 )
 async def check(
     file: UploadFile = File(...),
+    input_type: str = Query(default="image"),
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
 ):
@@ -193,6 +204,8 @@ async def check(
     )
 
     try:
+        validate_input_type(input_type)
+
         contents = await file.read()
 
         if not contents:
@@ -202,17 +215,13 @@ async def check(
                 code="empty_file",
             )
 
-        np_arr = np.frombuffer(contents, np.uint8)
-        image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-
-        if image is None:
-            return _rejected_check_response(
+        result = run_spoof_check_use_case.execute(
+            CheckCommand(
+                image_bytes=contents,
                 request_id=context.request_id,
                 correlation_id=context.correlation_id,
-                code="invalid_image",
             )
-
-        result = pipeline.predict(image)
+        )
 
         response = {
             "request_id": context.request_id,
@@ -224,7 +233,7 @@ async def check(
             "cred_antispoof_score": result.cred_antispoof_score,
             "rejection_reason": None,
             "privacy": build_privacy_metadata(),
-            "model_info": {
+            "engine_info": {
                 "antispoof_model": MODEL_NAME,
                 "model_type": MODEL_TYPE,
                 "heuristics": HEURISTICS,
@@ -246,7 +255,43 @@ async def check(
             },
         )
 
-        return response
+        return filter_check_response(response)
+
+    except UnsupportedInputTypeError as exc:
+        _log_error(
+            event="antispoof_check_rejected",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="validation_error",
+            error_code="UNSUPPORTED_INPUT_TYPE",
+            level=LOG_LEVEL_WARNING,
+        )
+
+        return _error_response(
+            status_code=400,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="UNSUPPORTED_INPUT_TYPE",
+            message=str(exc),
+        )
+
+    except ValueError:
+        _log_error(
+            event="antispoof_check_rejected",
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            error_type="validation_error",
+            error_code="invalid_image",
+            level=LOG_LEVEL_WARNING,
+        )
+
+        return _error_response(
+            status_code=400,
+            request_id=context.request_id,
+            correlation_id=context.correlation_id,
+            code="invalid_image",
+            message="Invalid request.",
+        )
 
     except AntiSpoofError:
         _log_error(
@@ -255,7 +300,7 @@ async def check(
             correlation_id=context.correlation_id,
             error_type="antispoof_error",
             error_code="antispoof_processing_error",
-            level="warning",
+            level=LOG_LEVEL_WARNING,
         )
 
         return _error_response(
@@ -273,7 +318,7 @@ async def check(
             correlation_id=context.correlation_id,
             error_type="runtime_error",
             error_code="internal_error",
-            level="error",
+            level=LOG_LEVEL_ERROR,
         )
 
         return _error_response(
@@ -296,7 +341,7 @@ def _rejected_check_response(
         correlation_id=correlation_id,
         error_type="validation_error",
         error_code=code,
-        level="warning",
+        level=LOG_LEVEL_WARNING,
     )
 
     return _error_response(
@@ -372,7 +417,7 @@ async def handle_request_validation_error(request: Request, exc: RequestValidati
         correlation_id=context.correlation_id,
         error_type="validation_error",
         error_code=error_code,
-        level="warning",
+        level=LOG_LEVEL_WARNING,
     )
 
     return _error_response(

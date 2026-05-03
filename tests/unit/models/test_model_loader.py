@@ -1,4 +1,4 @@
-from antispoof.models.loader import AntiSpoofModelLoader
+from antispoof.infrastructure.models.loader import AntiSpoofModelLoader
 
 
 def test_model_loader_loads_session():
