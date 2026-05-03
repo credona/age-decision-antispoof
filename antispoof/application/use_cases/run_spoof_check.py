@@ -1,16 +1,16 @@
 from antispoof.application.dto.check_command import CheckCommand
-from antispoof.application.ports.pipeline import AntiSpoofPipelinePort
+from antispoof.application.ports.pipeline import SpoofCheckPipelinePort
 
 
-class CheckLivenessUseCase:
+class RunSpoofCheckUseCase:
     """
-    Application use case for anti-spoofing checks.
+    Application use case for spoof check execution.
 
     The API layer owns request parsing and public response filtering.
-    The pipeline owns PAD inference and fusion.
+    The pipeline owns spoof check inference and fusion.
     """
 
-    def __init__(self, pipeline: AntiSpoofPipelinePort):
+    def __init__(self, pipeline: SpoofCheckPipelinePort):
         self.pipeline = pipeline
 
     def execute(self, command: CheckCommand):

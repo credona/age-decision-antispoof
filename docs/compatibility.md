@@ -31,7 +31,7 @@ Internal implementation details are not stable unless explicitly documented.
 ```text
 GET /health
 GET /version
-GET /model/status
+GET /engine/status
 POST /check
 GET /benchmark
 GET /openapi.json
@@ -125,7 +125,7 @@ spoof_detected
 cred_antispoof_score
 rejection_reason
 privacy
-model_info
+engine_info
 ```
 
 These fields should remain stable throughout the v2.x release line.
@@ -247,7 +247,7 @@ Compatibility is checked through:
 
 Version 2.3.0 contract governance additionally verifies:
 
-- stable status contracts for `GET /health` and `GET /model/status`
+- stable status contracts for `GET /health` and `GET /engine/status`
 - standardized `ErrorResponse` shape for validation and processing errors
 - missing multipart file mapped to `missing_file` with HTTP 400
 - privacy-first forbidden public fields remain absent from `/check` outputs (including `confidence`, `spoof_score`, `threshold`, `details`, `cred_score`, `raw_score`, `model_score`, and `heuristic_scores`)

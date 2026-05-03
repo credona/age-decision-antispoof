@@ -1,22 +1,22 @@
 from antispoof.domain.calibration import (
-    calibrate_antispoof_confidence,
+    calibrate_signal_quality,
     compute_cred_antispoof_score,
 )
 
 
-def test_calibrate_antispoof_confidence_clamps_low_values():
+def test_calibrate_signal_quality_clamps_low_values():
     """Test that calibration clamps values below zero."""
-    assert calibrate_antispoof_confidence(-0.5) == 0.0
+    assert calibrate_signal_quality(-0.5) == 0.0
 
 
-def test_calibrate_antispoof_confidence_clamps_high_values():
+def test_calibrate_signal_quality_clamps_high_values():
     """Test that calibration clamps values above one."""
-    assert calibrate_antispoof_confidence(1.5) == 1.0
+    assert calibrate_signal_quality(1.5) == 1.0
 
 
-def test_calibrate_antispoof_confidence_keeps_valid_values():
+def test_calibrate_signal_quality_keeps_valid_values():
     """Test that calibration keeps valid probability-like values."""
-    assert calibrate_antispoof_confidence(0.73) == 0.73
+    assert calibrate_signal_quality(0.73) == 0.73
 
 
 def test_compute_cred_antispoof_score():

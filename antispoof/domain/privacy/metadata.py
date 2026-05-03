@@ -1,5 +1,10 @@
 from typing import Any
 
+from antispoof.domain.constants import (
+    PROCESSING_SCOPE_IN_MEMORY,
+    RETENTION_POLICY_NO_IMAGE,
+)
+
 
 def build_privacy_metadata() -> dict[str, Any]:
     """Return privacy metadata describing how the input image is handled.
@@ -12,6 +17,6 @@ def build_privacy_metadata() -> dict[str, Any]:
         "image_persisted": False,
         "biometric_template_stored": False,
         "raw_image_logged": False,
-        "processing_scope": "in_memory_inference_only",
-        "retention_policy": "no_image_retention",
+        "processing_scope": PROCESSING_SCOPE_IN_MEMORY,
+        "retention_policy": RETENTION_POLICY_NO_IMAGE,
     }

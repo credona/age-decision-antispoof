@@ -30,7 +30,7 @@ def test_predict_from_full_image_with_mocked_core():
 
         assert result is not None
         assert hasattr(result, "is_real")
-        assert hasattr(result, "confidence")
+        assert hasattr(result, "signal_quality")
     finally:
         if previous_module is not None:
             sys.modules["age_decision_core"] = previous_module

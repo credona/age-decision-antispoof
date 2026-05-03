@@ -3,9 +3,10 @@ from pathlib import Path
 import numpy as np
 
 from antispoof.domain.calibration import (
-    calibrate_antispoof_confidence,
+    calibrate_signal_quality,
     compute_cred_antispoof_score,
 )
+from antispoof.domain.constants import DECISION_REAL, DECISION_SPOOF
 from antispoof.domain.heuristics import (
     BlurHeuristicAnalyzer,
     ScreenPatternHeuristicAnalyzer,
@@ -105,16 +106,16 @@ class AntiSpoofPipeline:
             + self.screen_weight * (1.0 - screen_score)
         )
 
-        final_score = calibrate_antispoof_confidence(raw_final_score)
+        final_score = calibrate_signal_quality(raw_final_score)
         cred_antispoof_score = compute_cred_antispoof_score(final_score)
 
         is_real = final_score >= self.threshold
 
         return AntiSpoofResult(
             is_real=is_real,
-            confidence=final_score,
+            signal_quality=final_score,
             threshold=self.threshold,
-            label="real" if is_real else "spoof",
+            label=DECISION_REAL if is_real else DECISION_SPOOF,
             model_score=model_real_score,
             spoof_score=spoof_score,
             texture_score=texture_score,

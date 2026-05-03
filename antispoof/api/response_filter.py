@@ -8,7 +8,7 @@ PUBLIC_CHECK_RESPONSE_FIELDS = {
     "cred_antispoof_score",
     "rejection_reason",
     "privacy",
-    "model_info",
+    "engine_info",
 }
 
 

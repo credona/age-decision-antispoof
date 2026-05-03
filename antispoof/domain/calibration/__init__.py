@@ -1,9 +1,9 @@
 from .confidence import (
-    calibrate_antispoof_confidence,
+    calibrate_signal_quality,
     compute_cred_antispoof_score,
 )
 
 __all__ = [
-    "calibrate_antispoof_confidence",
+    "calibrate_signal_quality",
     "compute_cred_antispoof_score",
 ]

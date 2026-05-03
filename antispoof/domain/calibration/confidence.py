@@ -3,8 +3,8 @@ def _clamp_score(value: float) -> float:
     return max(0.0, min(float(value), 1.0))
 
 
-def calibrate_antispoof_confidence(raw_score: float) -> float:
-    """Calibrate the anti-spoofing confidence score.
+def calibrate_signal_quality(raw_score: float) -> float:
+    """Calibrate the anti-spoofing signal_quality score.
 
     The current version calibration is intentionally conservative:
     it only guarantees a valid probability-like interval.
@@ -22,4 +22,4 @@ def compute_cred_antispoof_score(real_score: float) -> float:
     The score represents the credibility of the liveness evidence.
     A higher score means the image is more likely to be genuine.
     """
-    return calibrate_antispoof_confidence(real_score)
+    return calibrate_signal_quality(real_score)

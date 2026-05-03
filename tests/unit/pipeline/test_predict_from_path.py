@@ -16,6 +16,6 @@ def test_predict_from_path_returns_expected_structure(tmp_path):
     assert isinstance(result, AntiSpoofResult)
 
     assert isinstance(result.is_real, bool)
-    assert isinstance(result.confidence, float)
+    assert isinstance(result.signal_quality, float)
     assert isinstance(result.scores, list)
     assert result.label in ["real", "spoof"]

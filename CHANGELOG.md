@@ -7,10 +7,14 @@ Global project direction is tracked in the central Age Decision repository.
 <h2>2.4.0</h2>
 
 <ul>
-  <li>Started the v2.4.0 internal pipeline architecture refactoring cycle.</li>
-  <li>Prepared AntiSpoof for application, domain and infrastructure separation.</li>
-  <li>Preserved the existing public API contract with no response field changes.</li>
-  <li>Kept Docker and CI validation as the release gate for structural changes.</li>
+  <li>Introduced pipeline-oriented application, domain, and infrastructure boundaries.</li>
+  <li>Renamed liveness use case and pipeline port to neutral spoof check terminology.</li>
+  <li>Renamed public status metadata from model info to engine info.</li>
+  <li>Renamed internal confidence terminology to signal quality.</li>
+  <li>Centralized public decisions, model metadata, privacy metadata, and log levels as constants.</li>
+  <li>Updated documentation from model status terminology to engine status terminology.</li>
+  <li>Preserved the existing public API contract and privacy-first forbidden field checks.</li>
+  <li>Validated the refactor through Docker CI-equivalent checks.</li>
 </ul>
 
 <hr>

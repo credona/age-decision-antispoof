@@ -18,7 +18,7 @@ def test_check_response_filter_ignores_internal_fields():
                 "biometric_template_stored": False,
                 "processing": "ephemeral",
             },
-            "model_info": {
+            "engine_info": {
                 "antispoof_model": "MiniFASNetV2",
                 "model_type": "onnx",
                 "heuristics": ["texture", "screen_pattern", "blur"],

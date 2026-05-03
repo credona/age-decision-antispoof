@@ -4,6 +4,7 @@ from typing import Any
 
 import onnxruntime as ort
 
+from antispoof.domain.constants import MODEL_NAME_MINIFASNET, MODEL_TYPE_ONNX
 from antispoof.exceptions import ModelNotFoundError
 
 DEFAULT_MODEL_PATH = "antispoof/models/MiniFASNetV2.onnx"
@@ -23,8 +24,8 @@ class AntiSpoofModelLoader:
     def status(self) -> dict[str, Any]:
         """Return model metadata without loading the model again."""
         return {
-            "type": "onnx",
-            "name": "MiniFASNetV2",
+            "type": MODEL_TYPE_ONNX,
+            "name": MODEL_NAME_MINIFASNET,
             "path": str(self.model_path),
             "exists": self.exists(),
         }

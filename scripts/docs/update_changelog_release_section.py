@@ -19,10 +19,14 @@ CHANGELOG_PATH = Path("CHANGELOG.md")
 MANAGED_VERSION = "2.4.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
-    "Started the v2.4.0 internal pipeline architecture refactoring cycle.",
-    "Prepared AntiSpoof for application, domain and infrastructure separation.",
-    "Preserved the existing public API contract with no response field changes.",
-    "Kept Docker and CI validation as the release gate for structural changes.",
+    "Introduced pipeline-oriented application, domain, and infrastructure boundaries.",
+    "Renamed liveness use case and pipeline port to neutral spoof check terminology.",
+    "Renamed public status metadata from model info to engine info.",
+    "Renamed internal confidence terminology to signal quality.",
+    "Centralized public decisions, model metadata, privacy metadata, and log levels as constants.",
+    "Updated documentation from model status terminology to engine status terminology.",
+    "Preserved the existing public API contract and privacy-first forbidden field checks.",
+    "Validated the refactor through Docker CI-equivalent checks.",
 )
 
 

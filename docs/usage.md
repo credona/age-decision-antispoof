@@ -31,7 +31,7 @@ docker compose --env-file .generated/compose/dev.env -f docker-compose.dev.yml d
 ```bash
 curl -i http://localhost:8001/health
 curl -i http://localhost:8001/version
-curl -i http://localhost:8001/model/status
+curl -i http://localhost:8001/engine/status
 ```
 
 Expected health response:
