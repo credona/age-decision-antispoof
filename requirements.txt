@@ -10,5 +10,5 @@ uvicorn[standard]==0.46.0
 httpx==0.28.1
 python-multipart==0.0.26
 
-datasets==4.8.4
+datasets==4.8.5
 pillow==12.2.0
