@@ -118,16 +118,6 @@ def benchmark(
             {
                 "request_id": context.request_id,
                 "correlation_id": context.correlation_id,
-                "provider": PROVIDER,
-                "sample_count": response["dataset"]["sample_count"],
-                "current_threshold": response["current_threshold"],
-                "recommended_threshold": response["threshold_tuning"]["recommended_threshold"],
-                "apcer": response["metrics"]["apcer"],
-                "bpcer": response["metrics"]["bpcer"],
-                "acer": response["metrics"]["acer"],
-                "tuned_apcer": response["threshold_tuning"]["metrics"]["apcer"],
-                "tuned_bpcer": response["threshold_tuning"]["metrics"]["bpcer"],
-                "tuned_acer": response["threshold_tuning"]["metrics"]["acer"],
             },
         )
 
@@ -231,12 +221,6 @@ async def check(
                 "request_id": context.request_id,
                 "correlation_id": context.correlation_id,
                 "decision": response["decision"],
-                "is_real": response["is_real"],
-                "spoof_detected": response["spoof_detected"],
-                "cred_antispoof_score": response["cred_antispoof_score"],
-                "provider": response["provider"],
-                "image_persisted": response["privacy"]["image_persisted"],
-                "raw_image_logged": response["privacy"]["raw_image_logged"],
             },
         )
 

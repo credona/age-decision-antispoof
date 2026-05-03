@@ -19,6 +19,9 @@ CHANGELOG_PATH = Path("CHANGELOG.md")
 MANAGED_VERSION = "2.5.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
+    "Hardened runtime logging with strict privacy-safe sanitization including error_code support.",
+    "Removed sensitive fields such as raw_scores, image_base64 and provider from logs.",
+    "Added runtime logger tests using caplog to enforce structured logging guarantees.",
     "Introduced model metadata and registry abstractions for presentation attack detection models.",
     "Replaced low-level runtime model paths with stable model identifiers.",
     "Simplified runtime configuration with shared common values and empty dev/prod overrides.",

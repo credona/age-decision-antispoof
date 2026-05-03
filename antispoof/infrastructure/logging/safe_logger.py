@@ -3,6 +3,7 @@ import logging
 from datetime import UTC, datetime
 from typing import Any
 
+from antispoof.domain.privacy.safe_logging import sanitize_log_payload
 from antispoof.project import project_metadata
 
 logger = logging.getLogger("antispoof")
@@ -22,17 +23,16 @@ def log_event(
     payload: dict[str, Any] | None = None,
     level: str = "info",
 ) -> None:
-    """Log a structured JSON event.
+    """Log a structured privacy-safe JSON event."""
+    safe_payload = sanitize_log_payload(payload or {})
 
-    Logs must remain machine-readable and must never contain raw image data.
-    """
     log_entry = {
         "timestamp": datetime.now(UTC).isoformat(),
         "service": project_metadata.service_name,
         "version": project_metadata.version,
         "contract_version": project_metadata.contract_version,
         "event": event,
-        **(payload or {}),
+        **safe_payload,
     }
 
     message = json.dumps(log_entry, ensure_ascii=False, sort_keys=True)

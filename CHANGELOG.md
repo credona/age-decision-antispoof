@@ -7,6 +7,9 @@ Global project direction is tracked in the central Age Decision repository.
 <h2>2.5.0</h2>
 
 <ul>
+  <li>Hardened runtime logging with strict privacy-safe sanitization including error_code support.</li>
+  <li>Removed sensitive fields such as raw_scores, image_base64 and provider from logs.</li>
+  <li>Added runtime logger tests using caplog to enforce structured logging guarantees.</li>
   <li>Introduced model metadata and registry abstractions for presentation attack detection models.</li>
   <li>Replaced low-level runtime model paths with stable model identifiers.</li>
   <li>Simplified runtime configuration with shared common values and empty dev/prod overrides.</li>
