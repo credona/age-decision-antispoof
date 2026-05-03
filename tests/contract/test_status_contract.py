@@ -30,7 +30,7 @@ def test_health_contract_is_stable_and_privacy_first():
     assert "heuristic_scores" not in payload
 
 
-def test_model_status_contract_is_stable():
+def test_model_status_contract_is_stable_and_uses_model_identifier():
     response = client.get("/engine/status")
 
     assert response.status_code == 200
@@ -43,6 +43,14 @@ def test_model_status_contract_is_stable():
         "contract_version",
         "antispoof_model",
         "heuristics",
-        "threshold",
-        "weights",
     }
+
+    model = payload["antispoof_model"]
+
+    assert "model_id" in model
+    assert "model_version" in model
+    assert "scoring_policy_id" in model
+    assert "path" not in model
+    assert "model_path" not in model
+    assert "threshold" not in payload
+    assert "weights" not in payload

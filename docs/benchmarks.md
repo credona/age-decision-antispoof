@@ -2,15 +2,15 @@
 
 This document describes benchmark expectations for Age Decision AntiSpoof.
 
-Benchmark results should be reproducible and separated from product claims.
+Benchmark results must be reproducible and tied to explicit model identifiers.
 
 <hr>
 
 <h2>Benchmark endpoint</h2>
 
-```bash
+<pre>
 curl -i http://localhost:8001/benchmark
-```
+</pre>
 
 The endpoint evaluates the local benchmark dataset when available.
 
@@ -20,30 +20,11 @@ The endpoint evaluates the local benchmark dataset when available.
 
 The repository includes a local dataset structure under:
 
-```text
+<pre>
 benchmarks/datasets/
-```
-
-Real benchmark images should not be treated as product assets.
+</pre>
 
 Dataset licenses and usage rights must be verified before redistribution or commercial use.
-
-<hr>
-
-<h2>Download benchmark dataset</h2>
-
-```bash
-docker compose -f docker-compose.dev.yml exec age-decision-antispoof python scripts/download_benchmark_dataset.py --limit 200
-```
-
-Expected local structure:
-
-```text
-benchmarks/datasets/celeba_spoof/
-├── README.md
-├── labels.csv
-└── images/
-```
 
 <hr>
 
@@ -53,31 +34,33 @@ benchmarks/datasets/celeba_spoof/
 
 Attack Presentation Classification Error Rate.
 
-It measures spoof attacks incorrectly classified as real.
-
 <h3>BPCER</h3>
 
 Bona Fide Presentation Classification Error Rate.
 
-It measures real captures incorrectly classified as spoof.
-
 <h3>ACER</h3>
 
-Average Classification Error Rate.
-
-```text
+<pre>
 ACER = (APCER + BPCER) / 2
-```
+</pre>
 
 <hr>
 
-<h2>Threshold tuning</h2>
+<h2>Model reproducibility requirements</h2>
 
-The benchmark service can compute a threshold recommendation.
+Every benchmark MUST specify:
 
-A threshold optimized for ACER is not always the safest threshold.
+<pre>
+model_id
+model_version
+scoring_policy_id
+runtime
+execution provider
+dataset name
+dataset size
+</pre>
 
-For safety-oriented deployments, APCER must be reviewed separately.
+Low-level model paths must not be used as reference identifiers.
 
 <hr>
 
@@ -96,29 +79,15 @@ The current benchmark does not prove:
 
 <h2>Reporting format</h2>
 
-Benchmark reports should include:
-
-```text
+<pre>
 date
-runtime
-model path
+model_id
+model_version
+scoring_policy_id
 dataset name
 dataset size
-threshold
 APCER
 BPCER
 ACER
-recommended threshold
 known limitations
-```
-
-<hr>
-
-<h2>Model context</h2>
-
-Benchmark results depend on the model file used.
-
-Always report:
-
-- model path
-- model source
+</pre>

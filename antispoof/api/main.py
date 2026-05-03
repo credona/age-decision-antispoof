@@ -58,7 +58,6 @@ run_spoof_check_use_case = RunSpoofCheckUseCase(pipeline)
 
 @app.get("/health")
 def health():
-    """Return service health status."""
     return {
         "status": STATUS_OK,
         "service": project_metadata.service_name,
@@ -69,13 +68,11 @@ def health():
 
 @app.get("/version")
 def version():
-    """Return service version metadata."""
     return project_metadata.model_dump()
 
 
 @app.get("/engine/status")
 def engine_status():
-    """Return spoof check engine status."""
     model_metadata = model_loader.status()
 
     return {
@@ -84,15 +81,9 @@ def engine_status():
         "contract_version": project_metadata.contract_version,
         "antispoof_model": {
             **model_metadata,
-            "loaded": True,
+            "loaded": model_metadata["exists"],
         },
         "heuristics": HEURISTICS,
-        "threshold": THRESHOLD,
-        "weights": {
-            "model": MODEL_WEIGHT,
-            "texture": TEXTURE_WEIGHT,
-            "screen": SCREEN_WEIGHT,
-        },
     }
 
 
@@ -107,7 +98,6 @@ def benchmark(
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
 ):
-    """Run local benchmark evaluation and expose PAD metrics."""
     context = build_request_context(
         request_id=x_request_id,
         correlation_id=x_correlation_id,
@@ -193,11 +183,6 @@ async def check(
     x_request_id: str | None = Header(default=None, alias="X-Request-ID"),
     x_correlation_id: str | None = Header(default=None, alias="X-Correlation-ID"),
 ):
-    """Run anti-spoofing verification on an uploaded image.
-
-    The image is processed in memory only and is never persisted.
-    Internal model scores and heuristic details are not exposed publicly.
-    """
     context = build_request_context(
         request_id=x_request_id,
         correlation_id=x_correlation_id,

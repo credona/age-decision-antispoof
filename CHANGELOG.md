@@ -4,6 +4,23 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+<h2>2.5.0</h2>
+
+<ul>
+  <li>Introduced model metadata and registry abstractions for presentation attack detection models.</li>
+  <li>Replaced low-level runtime model paths with stable model identifiers.</li>
+  <li>Simplified runtime configuration with shared common values and empty dev/prod overrides.</li>
+  <li>Moved spoof threshold and fusion weights into a versioned scoring policy.</li>
+  <li>Added deterministic scoring policy tests covering score bounds, monotonicity, stability, and privacy.</li>
+  <li>Documented the public scoring methodology for cred_antispoof_score.</li>
+  <li>Documented calibration methodology, model reproducibility metadata, benchmark methodology, and dataset transparency.</li>
+  <li>Removed threshold logic from runtime configuration.</li>
+  <li>Preserved the privacy-first public contract and response filtering guarantees.</li>
+  <li>Validated the release through Docker CI-equivalent checks.</li>
+</ul>
+
+<hr>
+
 <h2>2.4.0</h2>
 
 <ul>

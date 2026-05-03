@@ -1,4 +1,4 @@
-"""Deterministically maintain the v2.4.0 release section in CHANGELOG.md."""
+"""Deterministically maintain the v2.5.0 release section in CHANGELOG.md."""
 
 from __future__ import annotations
 
@@ -16,20 +16,21 @@ from lib.changelog import (  # noqa: E402
 )
 
 CHANGELOG_PATH = Path("CHANGELOG.md")
-MANAGED_VERSION = "2.4.0"
+MANAGED_VERSION = "2.5.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
-    "Introduced pipeline-oriented application, domain, and infrastructure boundaries.",
-    "Added privacy-safe logging tests covering image, base64, raw payload, "
-    "internal scores, thresholds, and downstream data leakage.",
-    "Added deterministic rejection for unsupported v3 input types: image_sequence and video.",
-    "Renamed liveness use case and pipeline port to neutral spoof check terminology.",
-    "Renamed public status metadata from model info to engine info.",
-    "Renamed internal confidence terminology to signal quality.",
-    "Centralized public decisions, model metadata, privacy metadata, and log levels as constants.",
-    "Updated documentation from model status terminology to engine status terminology.",
-    "Preserved the existing public API contract and privacy-first forbidden field checks.",
-    "Validated the refactor through Docker CI-equivalent checks.",
+    "Introduced model metadata and registry abstractions for presentation attack detection models.",
+    "Replaced low-level runtime model paths with stable model identifiers.",
+    "Simplified runtime configuration with shared common values and empty dev/prod overrides.",
+    "Moved spoof threshold and fusion weights into a versioned scoring policy.",
+    "Added deterministic scoring policy tests covering score bounds, "
+    "monotonicity, stability, and privacy.",
+    "Documented the public scoring methodology for cred_antispoof_score.",
+    "Documented calibration methodology, model reproducibility metadata, "
+    "benchmark methodology, and dataset transparency.",
+    "Removed threshold logic from runtime configuration.",
+    "Preserved the privacy-first public contract and response filtering guarantees.",
+    "Validated the release through Docker CI-equivalent checks.",
 )
 
 

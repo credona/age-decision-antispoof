@@ -48,13 +48,18 @@ def test_model_status():
     assert "version" in payload
     assert "antispoof_model" in payload
     assert "heuristics" in payload
-    assert "threshold" in payload
-    assert "weights" in payload
+    assert "threshold" not in payload
+    assert "weights" not in payload
+
+    model = payload["antispoof_model"]
+    assert "model_id" in model
+    assert "model_version" in model
+    assert "scoring_policy_id" in model
+    assert "path" not in model
 
     assert payload["antispoof_model"]["loaded"] is True
-    assert payload["antispoof_model"]["type"] == "onnx"
-    assert payload["antispoof_model"]["name"] == "MiniFASNetV2"
-    assert "path" in payload["antispoof_model"]
+    assert payload["antispoof_model"]["runtime"] == "onnx"
+    assert payload["antispoof_model"]["model_id"] == "credona.antispoof.minifasnet-v2.v1"
     assert payload["antispoof_model"]["exists"] is True
     project = json.loads(Path("project.json").read_text(encoding="utf-8"))
     assert payload["version"] == project["version"]

@@ -61,7 +61,7 @@ def test_pipeline_rejects_invalid_threshold():
         try:
             AntiSpoofPipeline(threshold=threshold)
         except ValueError as exc:
-            assert str(exc) == "Threshold must be between 0.0 and 1.0."
+            assert str(exc) == "threshold must be between 0.0 and 1.0"
         else:
             raise AssertionError("Expected ValueError for invalid threshold.")
 
@@ -71,6 +71,6 @@ def test_pipeline_rejects_invalid_weights():
     try:
         AntiSpoofPipeline(model_weight=0.8, texture_weight=0.3, screen_weight=0.3)
     except ValueError as exc:
-        assert str(exc) == "Weights must sum to 1.0."
+        assert str(exc) == "weights must sum to 1.0"
     else:
         raise AssertionError("Expected ValueError for invalid weights.")
