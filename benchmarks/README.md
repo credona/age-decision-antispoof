@@ -26,7 +26,7 @@ Benchmark reports must never expose:
 - internal thresholds
 - score components
 - local image paths
-- labels.csv paths
+- manifest raw content
 - base64 payloads
 - raw payloads
 - downstream raw responses

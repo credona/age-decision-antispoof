@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 
 from antispoof import AntiSpoof
-from antispoof.benchmark.dataset import load_benchmark_labels
+from antispoof.benchmark.dataset import load_benchmark_manifest
 from antispoof.domain.metrics import compute_error_rates
 from benchmarks.common.report import build_benchmark_report, write_report
 
@@ -19,7 +19,7 @@ def parse_args() -> argparse.Namespace:
 
 def run_model_benchmark(args: argparse.Namespace) -> dict[str, object]:
     dataset_dir = Path(args.dataset_dir)
-    samples = load_benchmark_labels(dataset_dir / "labels.csv")
+    samples = load_benchmark_manifest(dataset_dir / "manifest.json")
     pipeline = AntiSpoof()
 
     durations_ms: list[float] = []
