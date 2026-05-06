@@ -1,4 +1,4 @@
-"""Deterministically maintain the v2.5.0 release section in CHANGELOG.md."""
+"""Deterministically maintain the v2.6.0 release section in CHANGELOG.md."""
 
 from __future__ import annotations
 
@@ -16,23 +16,15 @@ from lib.changelog import (  # noqa: E402
 )
 
 CHANGELOG_PATH = Path("CHANGELOG.md")
-MANAGED_VERSION = "2.5.0"
+MANAGED_VERSION = "2.6.0"
 
 CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
-    "Hardened runtime logging with strict privacy-safe sanitization including error_code support.",
-    "Removed sensitive fields such as raw_scores, image_base64 and provider from logs.",
-    "Added runtime logger tests using caplog to enforce structured logging guarantees.",
-    "Introduced model metadata and registry abstractions for presentation attack detection models.",
-    "Replaced low-level runtime model paths with stable model identifiers.",
-    "Simplified runtime configuration with shared common values and empty dev/prod overrides.",
-    "Moved spoof threshold and fusion weights into a versioned scoring policy.",
-    "Added deterministic scoring policy tests covering score bounds, "
-    "monotonicity, stability, and privacy.",
-    "Documented the public scoring methodology for cred_antispoof_score.",
-    "Documented calibration methodology, model reproducibility metadata, "
-    "benchmark methodology, and dataset transparency.",
-    "Removed threshold logic from runtime configuration.",
-    "Preserved the privacy-first public contract and response filtering guarantees.",
+    "Added privacy-safe benchmark report schema for API end-to-end benchmarks.",
+    "Added API end-to-end benchmark execution script for the public verification flow.",
+    "Added aggregate latency, decision distribution, and spoof-check presence metrics.",
+    "Added machine, runtime, dataset, and hosting provider metadata in benchmark reports.",
+    "Added benchmark privacy tests preventing raw payloads and downstream response exposure.",
+    "Added benchmark output schema tests for reproducible reporting.",
     "Validated the release through Docker CI-equivalent checks.",
 )
 

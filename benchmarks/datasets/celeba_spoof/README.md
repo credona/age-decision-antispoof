@@ -25,19 +25,26 @@ python scripts/download_benchmark_dataset.py \
 ```text
 celeba_spoof/
 ├── README.md
-├── labels.csv
+├── manifest.json
 └── images/
     ├── 000000_real.jpg
     ├── 000001_spoof.jpg
     └── ...
 ```
 
-<h2>CSV format</h2>
+<h2>Manifest format</h2>
 
-```csv
-image_path,label
-images/000000_real.jpg,real
-images/000001_spoof.jpg,spoof
+```json
+[
+  {
+    "image_path": "images/000000_real.jpg",
+    "label": "real"
+  },
+  {
+    "image_path": "images/000001_spoof.jpg",
+    "label": "spoof"
+  }
+]
 ```
 
 <h2>Notes</h2>
