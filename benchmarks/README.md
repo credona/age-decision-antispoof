@@ -34,27 +34,19 @@ Benchmark reports must never expose:
 
 Only aggregate metrics are allowed.
 
-## Dataset
+## Datasets
 
-Dataset files are not bundled by default.
+Benchmark datasets are not bundled by default.
 
-A local benchmark dataset must contain:
+Generic dataset format documentation is available in:
 
-- labels.csv
-- image files referenced by labels.csv
+benchmarks/datasets/README.md
 
-Expected labels:
+Dataset-specific instructions are available inside each dataset directory.
 
-- real
-- spoof
+Example:
 
-## Download helper
-
-A small external dataset subset may be prepared with:
-
-python scripts/benchmark/download_benchmark_dataset.py --limit 20
-
-Dataset license and usage limits must be checked before publishing any report.
+benchmarks/datasets/celeba_spoof/README.md
 
 ## Model benchmark
 
