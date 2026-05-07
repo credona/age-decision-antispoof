@@ -7,13 +7,11 @@ Global project direction is tracked in the central Age Decision repository.
 <h2>2.6.0</h2>
 
 <ul>
-  <li>Added privacy-safe benchmark report schema for API end-to-end benchmarks.</li>
-  <li>Added API end-to-end benchmark execution script for the public verification flow.</li>
-  <li>Added aggregate latency, decision distribution, and spoof-check presence metrics.</li>
-  <li>Added machine, runtime, dataset, and hosting provider metadata in benchmark reports.</li>
-  <li>Added benchmark privacy tests preventing raw payloads and downstream response exposure.</li>
-  <li>Added benchmark output schema tests for reproducible reporting.</li>
-  <li>Validated the release through Docker CI-equivalent checks.</li>
+  <li>Updated project and compatibility metadata to v2.6.0.</li>
+  <li>Aligned AntiSpoof with the centralized age-decision-benchmark laboratory.</li>
+  <li>Removed legacy local benchmark orchestration and sample benchmark datasets from the service repository.</li>
+  <li>Kept AntiSpoof focused on spoof analysis, public contract, privacy, scoring, and dataset manifest parsing.</li>
+  <li>Preserved Docker CI-equivalent validation after benchmark orchestration cleanup.</li>
 </ul>
 
 <hr>
