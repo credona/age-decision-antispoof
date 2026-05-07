@@ -21,7 +21,7 @@ The endpoint evaluates the local benchmark dataset when available.
 The repository includes a local dataset structure under:
 
 <pre>
-benchmarks/datasets/
+../age-decision-benchmark/datasets/
 </pre>
 
 Dataset licenses and usage rights must be verified before redistribution or commercial use.
