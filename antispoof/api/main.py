@@ -21,6 +21,7 @@ from antispoof.domain.constants import (
 )
 from antispoof.domain.privacy import build_privacy_metadata
 from antispoof.exceptions import AntiSpoofError
+from antispoof.infrastructure.calibration import load_antispoof_runtime_calibration
 from antispoof.infrastructure.logging.safe_logger import log_event
 from antispoof.infrastructure.models.loader import AntiSpoofModelLoader
 from antispoof.project import project_metadata
@@ -46,12 +47,14 @@ app = FastAPI(
 )
 
 model_loader = AntiSpoofModelLoader()
+runtime_calibration_policy = load_antispoof_runtime_calibration()
 
 pipeline = AntiSpoof(
     threshold=THRESHOLD,
     model_weight=MODEL_WEIGHT,
     texture_weight=TEXTURE_WEIGHT,
     screen_weight=SCREEN_WEIGHT,
+    calibration_policy=runtime_calibration_policy,
 )
 run_spoof_check_use_case = RunSpoofCheckUseCase(pipeline)
 

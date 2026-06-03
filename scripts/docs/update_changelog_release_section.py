@@ -25,7 +25,20 @@ CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
     "from the service repository.",
     "Kept AntiSpoof focused on spoof analysis, public contract, privacy, "
     "scoring, and dataset manifest parsing.",
-    "Preserved Docker CI-equivalent validation after benchmark orchestration cleanup.",
+    "Added runtime private calibration policy loading for AntiSpoof.",
+    "Added SHA-256 integrity verification for private calibration policies.",
+    "Added Ed25519 signature verification for private calibration policies.",
+    "Added service, contract_version, and model_identifier compatibility checks "
+    "before calibration activation.",
+    "Added fail-fast runtime activation when AntiSpoof calibration is required "
+    "but missing or invalid.",
+    "Applied deterministic AntiSpoof calibration before spoof decision computation.",
+    "Hardened response filtering and privacy tests to prevent calibration internals "
+    "from reaching public responses.",
+    "Hardened safe logging to prevent private calibration fields, signatures, hashes, "
+    "weights, margins, and thresholds from being logged.",
+    "Ensured private runtime calibration policies are excluded from Git tracking.",
+    "Preserved Docker CI-equivalent validation after runtime calibration integration.",
 )
 
 

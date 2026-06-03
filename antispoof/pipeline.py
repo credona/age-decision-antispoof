@@ -3,6 +3,8 @@ from pathlib import Path
 import numpy as np
 
 from antispoof.domain.calibration import (
+    AntispoofCalibrationApplier,
+    RuntimeCalibrationPolicy,
     calibrate_signal_quality,
     compute_cred_antispoof_score,
 )
@@ -33,6 +35,7 @@ class AntiSpoofPipeline:
         texture_weight: float | None = None,
         screen_weight: float | None = None,
         scoring_policy: AntispoofScoringPolicy | None = None,
+        calibration_policy: RuntimeCalibrationPolicy | None = None,
     ):
         base_policy = scoring_policy or default_antispoof_scoring_policy()
 
@@ -54,6 +57,7 @@ class AntiSpoofPipeline:
         self.model_weight = self.scoring_policy.model_weight
         self.texture_weight = self.scoring_policy.texture_weight
         self.screen_weight = self.scoring_policy.screen_weight
+        self.calibration_applier = AntispoofCalibrationApplier(calibration_policy)
 
         self.session = AntiSpoofModelLoader().load()
         self.input_name = self.session.get_inputs()[0].name
@@ -105,8 +109,15 @@ class AntiSpoofPipeline:
             + self.scoring_policy.screen_weight * (1.0 - screen_score)
         )
 
-        final_score = calibrate_signal_quality(raw_final_score)
-        cred_antispoof_score = compute_cred_antispoof_score(final_score)
+        base_final_score = calibrate_signal_quality(raw_final_score)
+        base_cred_antispoof_score = compute_cred_antispoof_score(base_final_score)
+        calibrated_signal = self.calibration_applier.apply(
+            final_score=base_final_score,
+            cred_antispoof_score=base_cred_antispoof_score,
+        )
+
+        final_score = calibrated_signal.final_score
+        cred_antispoof_score = calibrated_signal.cred_antispoof_score
 
         is_real = final_score >= self.scoring_policy.threshold
 
@@ -127,11 +138,6 @@ class AntiSpoofPipeline:
                     "spoof_score": spoof_score,
                     "raw_scores": raw_scores.tolist(),
                 },
-                "calibration": {
-                    "method": self.scoring_policy.calibration_method,
-                    "raw_final_score": raw_final_score,
-                    "calibrated_score": final_score,
-                },
                 "cred": {
                     "cred_antispoof_score": cred_antispoof_score,
                     "meaning": "higher_score_means_more_likely_real",
@@ -139,11 +145,6 @@ class AntiSpoofPipeline:
                 "texture": texture_result.to_dict(),
                 "screen": screen_result.to_dict(),
                 "blur": blur_result.to_dict(),
-                "weights": {
-                    "model": self.scoring_policy.model_weight,
-                    "texture": self.scoring_policy.texture_weight,
-                    "screen": self.scoring_policy.screen_weight,
-                },
             },
         )
 

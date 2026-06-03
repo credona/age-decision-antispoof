@@ -28,8 +28,8 @@ def test_pipeline_predict_returns_expected_structure():
     assert "texture" in result.details
     assert "blur" in result.details
     assert "model" in result.details
-    assert "weights" in result.details
-    assert "calibration" in result.details
+    assert "weights" not in result.details
+    assert "calibration" not in result.details
     assert "cred" in result.details
 
     assert result.label in ["real", "spoof"]

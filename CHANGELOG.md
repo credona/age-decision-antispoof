@@ -11,7 +11,16 @@ Global project direction is tracked in the central Age Decision repository.
   <li>Aligned AntiSpoof with the centralized age-decision-benchmark laboratory.</li>
   <li>Removed legacy local benchmark orchestration and sample benchmark datasets from the service repository.</li>
   <li>Kept AntiSpoof focused on spoof analysis, public contract, privacy, scoring, and dataset manifest parsing.</li>
-  <li>Preserved Docker CI-equivalent validation after benchmark orchestration cleanup.</li>
+  <li>Added runtime private calibration policy loading for AntiSpoof.</li>
+  <li>Added SHA-256 integrity verification for private calibration policies.</li>
+  <li>Added Ed25519 signature verification for private calibration policies.</li>
+  <li>Added service, contract_version, and model_identifier compatibility checks before calibration activation.</li>
+  <li>Added fail-fast runtime activation when AntiSpoof calibration is required but missing or invalid.</li>
+  <li>Applied deterministic AntiSpoof calibration before spoof decision computation.</li>
+  <li>Hardened response filtering and privacy tests to prevent calibration internals from reaching public responses.</li>
+  <li>Hardened safe logging to prevent private calibration fields, signatures, hashes, weights, margins, and thresholds from being logged.</li>
+  <li>Ensured private runtime calibration policies are excluded from Git tracking.</li>
+  <li>Preserved Docker CI-equivalent validation after runtime calibration integration.</li>
 </ul>
 
 <hr>

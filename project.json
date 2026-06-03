@@ -26,7 +26,10 @@
       "ANTISPOOF_MODEL_ID": "credona.antispoof.minifasnet-v2.v1",
       "USE_MOCK_MODEL": "false",
       "LOG_LEVEL": "INFO",
-      "LOG_FORMAT": "json"
+      "LOG_FORMAT": "json",
+      "ANTISPOOF_CALIBRATION_POLICY_PATH": "",
+      "ANTISPOOF_CALIBRATION_PUBLIC_KEY_B64": "",
+      "ANTISPOOF_CALIBRATION_REQUIRED": "false"
     },
     "dev": {},
     "prod": {}
