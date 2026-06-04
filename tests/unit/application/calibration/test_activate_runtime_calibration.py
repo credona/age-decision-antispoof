@@ -1,7 +1,6 @@
 from antispoof.application.calibration.activate_runtime_calibration import (
     ActivateRuntimeCalibrationUseCase,
 )
-
 from antispoof.domain.calibration import CalibrationPolicyMetadata, RuntimeCalibrationPolicy
 from antispoof.domain.calibration.lifecycle import CalibrationLifecycleState
 

@@ -1,7 +1,6 @@
 from antispoof.application.calibration.get_public_calibration_summary import (
     GetPublicCalibrationSummaryUseCase,
 )
-
 from antispoof.domain.calibration import CalibrationPolicyMetadata, RuntimeCalibrationPolicy
 from antispoof.domain.calibration.lifecycle import CalibrationLifecycleState
 

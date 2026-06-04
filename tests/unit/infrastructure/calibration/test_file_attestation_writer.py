@@ -1,11 +1,10 @@
 import json
 from pathlib import Path
 
+from antispoof.domain.calibration.attestation import CalibrationAttestation
 from antispoof.infrastructure.calibration.file_attestation_writer import (
     FileCalibrationAttestationWriter,
 )
-
-from antispoof.domain.calibration.attestation import CalibrationAttestation
 
 
 def test_file_attestation_writer_writes_json_document(tmp_path: Path) -> None:

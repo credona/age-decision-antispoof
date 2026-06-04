@@ -1,8 +1,8 @@
 import pytest
+
 from antispoof.application.calibration.rollback_runtime_calibration import (
     RollbackRuntimeCalibrationUseCase,
 )
-
 from antispoof.domain.calibration.lifecycle import CalibrationLifecycleState
 
 

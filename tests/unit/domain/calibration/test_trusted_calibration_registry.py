@@ -1,4 +1,5 @@
 import pytest
+
 from antispoof.domain.calibration.trusted_registry import TrustedCalibrationRegistry
 
 

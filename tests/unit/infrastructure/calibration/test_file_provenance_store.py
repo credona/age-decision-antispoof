@@ -1,11 +1,10 @@
 import json
 from pathlib import Path
 
+from antispoof.domain.calibration.provenance import CalibrationProvenanceRecord
 from antispoof.infrastructure.calibration.file_provenance_store import (
     FileCalibrationProvenanceStore,
 )
-
-from antispoof.domain.calibration.provenance import CalibrationProvenanceRecord
 
 
 def test_file_provenance_store_appends_jsonl_records(tmp_path: Path) -> None:

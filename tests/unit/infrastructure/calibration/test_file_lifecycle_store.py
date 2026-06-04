@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from antispoof.infrastructure.calibration.file_lifecycle_store import FileCalibrationLifecycleStore
-
 from antispoof.domain.calibration.lifecycle import CalibrationLifecycleState
+from antispoof.infrastructure.calibration.file_lifecycle_store import FileCalibrationLifecycleStore
 
 
 def test_file_lifecycle_store_returns_empty_state_when_missing(tmp_path: Path) -> None:
