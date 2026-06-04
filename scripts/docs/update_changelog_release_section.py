@@ -30,15 +30,24 @@ CHANGELOG_SECTION_ITEMS: tuple[str, ...] = (
     "Added Ed25519 signature verification for private calibration policies.",
     "Added service, contract_version, and model_identifier compatibility checks "
     "before calibration activation.",
-    "Added fail-fast runtime activation when AntiSpoof calibration is required "
-    "but missing or invalid.",
+    "Added runtime distribution manifest validation for AntiSpoof calibration.",
+    "Added trusted calibration registry validation for AntiSpoof calibration.",
+    "Added persistent runtime calibration lifecycle state.",
+    "Added persistent active and previous calibration state tracking.",
+    "Added runtime calibration rollback support.",
+    "Added append-only calibration provenance records.",
+    "Added activation and rollback calibration attestations.",
+    "Added public calibration summary support without private payload exposure.",
+    "Added file-based lifecycle, provenance, manifest, registry, and attestation "
+    "adapters for Docker runtime.",
+    "Added runtime calibration public metadata storage for safe summaries.",
     "Applied deterministic AntiSpoof calibration before spoof decision computation.",
     "Hardened response filtering and privacy tests to prevent calibration internals "
     "from reaching public responses.",
     "Hardened safe logging to prevent private calibration fields, signatures, hashes, "
     "weights, margins, and thresholds from being logged.",
     "Ensured private runtime calibration policies are excluded from Git tracking.",
-    "Preserved Docker CI-equivalent validation after runtime calibration integration.",
+    "Preserved Docker CI-equivalent validation after runtime calibration lifecycle integration.",
 )
 
 
