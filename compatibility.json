@@ -1,7 +1,7 @@
 {
   "service": "age-decision-antispoof",
-  "version": "2.5.0",
-  "contract_version": "2.5",
+  "version": "2.6.0",
+  "contract_version": "2.6",
   "compatible_with": {
     "age-decision-api": ">=2.0.0 <3.0.0",
     "age-decision-js": ">=2.0.0 <3.0.0"

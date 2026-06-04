@@ -4,6 +4,36 @@ This changelog tracks changes specific to Age Decision AntiSpoof.
 
 Global project direction is tracked in the central Age Decision repository.
 
+<h2>2.6.0</h2>
+
+<ul>
+  <li>Updated project and compatibility metadata to v2.6.0.</li>
+  <li>Aligned AntiSpoof with the centralized age-decision-benchmark laboratory.</li>
+  <li>Removed legacy local benchmark orchestration and sample benchmark datasets from the service repository.</li>
+  <li>Kept AntiSpoof focused on spoof analysis, public contract, privacy, scoring, and dataset manifest parsing.</li>
+  <li>Added runtime private calibration policy loading for AntiSpoof.</li>
+  <li>Added SHA-256 integrity verification for private calibration policies.</li>
+  <li>Added Ed25519 signature verification for private calibration policies.</li>
+  <li>Added service, contract_version, and model_identifier compatibility checks before calibration activation.</li>
+  <li>Added runtime distribution manifest validation for AntiSpoof calibration.</li>
+  <li>Added trusted calibration registry validation for AntiSpoof calibration.</li>
+  <li>Added persistent runtime calibration lifecycle state.</li>
+  <li>Added persistent active and previous calibration state tracking.</li>
+  <li>Added runtime calibration rollback support.</li>
+  <li>Added append-only calibration provenance records.</li>
+  <li>Added activation and rollback calibration attestations.</li>
+  <li>Added public calibration summary support without private payload exposure.</li>
+  <li>Added file-based lifecycle, provenance, manifest, registry, and attestation adapters for Docker runtime.</li>
+  <li>Added runtime calibration public metadata storage for safe summaries.</li>
+  <li>Applied deterministic AntiSpoof calibration before spoof decision computation.</li>
+  <li>Hardened response filtering and privacy tests to prevent calibration internals from reaching public responses.</li>
+  <li>Hardened safe logging to prevent private calibration fields, signatures, hashes, weights, margins, and thresholds from being logged.</li>
+  <li>Ensured private runtime calibration policies are excluded from Git tracking.</li>
+  <li>Preserved Docker CI-equivalent validation after runtime calibration lifecycle integration.</li>
+</ul>
+
+<hr>
+
 <h2>2.5.0</h2>
 
 <ul>

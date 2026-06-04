@@ -12,3 +12,4 @@ python-multipart==0.0.26
 
 datasets==4.8.4
 pillow==12.2.0
+cryptography==46.0.3

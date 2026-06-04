@@ -24,3 +24,17 @@ antispoof/models/**
 !.vscode/extensions.json
 .idea/
 *.swp
+
+# Runtime private calibration policies
+*.private.json
+*.policy.private.json
+*.calibration.json
+*.calibration.sig
+
+# Runtime private calibration artifacts only
+/private-calibration/
+/calibration-artifacts/
+*.private.json
+*.policy.private.json
+*.calibration.json
+*.calibration.sig
