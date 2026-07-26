@@ -83,7 +83,7 @@ jobs:
                       DESCRIPTION=${{ steps.project.outputs.description }}
                       LICENSE=${{ steps.project.outputs.license }}
 
-            - uses: actions/setup-python@v6
+            - uses: actions/setup-python@v7
               with:
                   python-version: "3.14"
 
